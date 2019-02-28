@@ -3,14 +3,13 @@ import os
 import re
 import urllib.error
 import urllib.request
+from _socket import timeout
 
 from bs4 import BeautifulSoup
 from PyQt5.QtGui import QImage  # pylint: disable-msg=E0611
 
-from _socket import timeout
-from movie_plist.conf.global_conf import (
-    MOVIE_PLIST_CACHE, MOVIE_SEEN, MOVIE_UNSEEN
-)
+from movie_plist.conf.global_conf import MOVIE_PLIST_CACHE
+from movie_plist.data.pyscan import MOVIE_SEEN, MOVIE_UNSEEN
 
 
 class ParseImdbData:
