@@ -5,9 +5,9 @@ import sys
 from PyQt5.QtWidgets import QApplication
 
 from movie_plist.conf.global_conf import (
-    MOVIE_SEEN, MOVIE_UNSEEN, SEEN_JSON_FILE, UNSEEN_JSON_FILE,
-    check_movie_plist_dirs, dump_json_movie
+    SEEN_JSON_FILE, UNSEEN_JSON_FILE, check_movie_plist_dirs, dump_json_movie
 )
+from movie_plist.data.pimdbdata import MOVIE_SEEN, MOVIE_UNSEEN
 from movie_plist.data.pyscan import create_dicts
 from movie_plist.pyqt_gui.main_window import Window
 
