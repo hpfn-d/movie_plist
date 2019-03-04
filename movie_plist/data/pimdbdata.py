@@ -23,7 +23,13 @@ class ParseImdbData:
         self.cache_poster = self.make_poster_name()
         if not self.synopsis_exists():
             # Maybe put these in other class
-            self.soup = BeautifulSoup(self._get_html(), 'html.parser')
+            try:
+                self.soup = BeautifulSoup(self._get_html(), 'html.parser')
+            except TypeError:
+                print("For some reason bs4 says that html file is empty")
+                print("or there is a problem reading the record saved in .cache dir.")
+                print("Please, try again.")
+                print(title)
             self.bs4_synopsis()
             self._do_poster_png_file()
 
