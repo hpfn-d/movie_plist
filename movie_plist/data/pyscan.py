@@ -5,19 +5,6 @@ from sys import exit
 
 from movie_plist.conf.global_conf import CFG_FILE, MOVIE_SEEN, MOVIE_UNSEEN
 
-# from movie_plist.data.pimdbdata import ParseImdbData
-
-
-# class CreateDict:
-#     def __init__(self, scan_dir):
-#         self._scan_dir = scan_dir
-#         self._json_movies = ''
-#         self._file_with_url = ''
-#
-
-
-# _scan_dir = ''
-
 
 def create_dicts():
     """
@@ -28,20 +15,13 @@ def create_dicts():
     # return seen and unseen movies
     """
 
-    # global _scan_dir
-
-    # _scan_dir = scan_dir
-
     start = time.time()
 
     movie_unseen_to_add = {dir_name: i for dir_name, i in _new_data()}
     MOVIE_UNSEEN.update(movie_unseen_to_add)
-    # dump_json_movie(MOVIE_UNSEEN, UNSEEN_JSON_FILE)
 
     end = time.time()
     print(end - start)
-
-    # return MOVIE_SEEN, MOVIE_UNSEEN
 
 
 def _new_data():
@@ -66,7 +46,6 @@ def _new_desktop_f():
 def _unknow_dirs():
     """ root (path) that are not in json files """
 
-    # global _scan_dir
     _scan_dir = get_dir_path()
     scan_dir_has_movies(_scan_dir)
 
@@ -139,7 +118,6 @@ def scan_dir_has_movies(scan_dir):
                 return True
 
     from PyQt5.QtWidgets import QMessageBox, QApplication  # pylint: disable-msg=E0611
-    #    import sys
 
     app = QApplication(['0'])  # noqa: F841
 
