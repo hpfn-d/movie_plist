@@ -16,8 +16,6 @@ class Window(QMainWindow):
     def __init__(self):  # , m_seen, m_unseen):  # m_seen, m_unseen):
         super().__init__()
         self.two_lines = splitter.TwoLines()
-        # self.seen_list = MOVIE_SEEN
-        # self.unseen_list = MOVIE_UNSEEN
 
         self.init_ui()
 
