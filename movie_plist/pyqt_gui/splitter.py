@@ -13,7 +13,7 @@ from PyQt5.QtWidgets import (  # pylint: disable-msg=E0611
     QTreeView, QVBoxLayout, QWidget
 )
 
-from movie_plist.data.pimdbdata import MOVIE_SEEN, MOVIE_UNSEEN
+from movie_plist.data.pyscan import MOVIE_SEEN, MOVIE_UNSEEN
 from movie_plist.html_file.htmltags import HtmlTags
 from movie_plist.pyqt_gui.right_click_menu import RightClickMenu
 
