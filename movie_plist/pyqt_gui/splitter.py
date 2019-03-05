@@ -29,21 +29,8 @@ class TwoLines(QWidget):
             self.current_dict = MOVIE_SEEN
             self.current_list = sorted(MOVIE_SEEN.keys())
 
-        # self.us_list = m_unseen
-        # self.s_list = m_seen
-        # self.current_dict = all_movies
         self.tabs = QTabWidget()
-        # movie info
-        # self.tab_synopsys = QWidget()
-        # ls dir
-        # self.tab_ls_dir = QWidget()
-        # layout
-        # self.synopsys_vbox = QVBoxLayout()
-        # self.lsdir_vbox = QVBoxLayout()
-        # movie info
         self.bottom = QLabel()
-        # ls content of the current dirQt.CustomContextMenu
-        # self.lsdir = QFileSystemModel()
         self.tree = QTreeView()
 
         self.init_ui()
@@ -54,8 +41,6 @@ class TwoLines(QWidget):
         self.top.addItems(self.current_list)
         self.top.setCurrentRow(0)
         self.top.setContextMenuPolicy(Qt.CustomContextMenu)
-        # self.top.itemClicked.connect(self.top.Clicked)
-        # self.bottom.setText(self.top.currentItem().text())
 
         # TAB movie info
         self.data_to_show()
@@ -118,9 +103,6 @@ class TwoLines(QWidget):
         """
         title = self.top.currentItem().text()
         url = self.current_dict[title][0]
-        # if url in 'bad url':
-        #    self.bottom.setText('bad url')
-        # else:
         context = HtmlTags(url, title)
         self.bottom.setText(context.context)
 
