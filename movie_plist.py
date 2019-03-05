@@ -12,15 +12,9 @@ from movie_plist.pyqt_gui.main_window import Window
 
 
 def main():
-    # c_d = create_dicts(d_scan)
     create_dicts()
-    # movie_seen, movie_unseen = MOVIE_SEEN, MOVIE_UNSEEN  # create_dicts(d_scan)
     app = QApplication(sys.argv)
     ex = Window()  # noqa: F841
-
-    # def w_json_movie_file(movie_dic, json_file):
-    #    with open(json_file, 'w') as outfile:
-    #        json.dump(movie_dic, outfile)
 
     exit_task = [
         app.exec_(),
@@ -31,10 +25,5 @@ def main():
 
 
 if __name__ == '__main__':
-    # if internet_on() == 200:
     check_movie_plist_dirs()
-    # path_dir_scan = get_dir_path()
-    # scan_dir_has_movies(path_dir_scan)
     main()
-    # else:
-    #     print(" Please, check your internet connection. ")
