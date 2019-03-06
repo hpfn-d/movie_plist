@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 import os
 import re
-import urllib.error
 import urllib.request
 from _socket import timeout
+from urllib.error import URLError
 
 from bs4 import BeautifulSoup
 from PyQt5.QtGui import QImage  # pylint: disable-msg=E0611
@@ -22,16 +22,9 @@ class ParseImdbData:
         self.synopsis = ''
         self.cache_poster = self.make_poster_name()
         if not self.synopsis_exists():
-            # Maybe put these in other class
-            try:
-                self.soup = BeautifulSoup(self._get_html(), 'html.parser')
-            except TypeError:
-                print("For some reason bs4 says that html file is empty")
-                print("or there is a problem reading the record saved in .cache dir.")
-                print("Please, try again.")
-                print(title)
-            self.bs4_synopsis()
-            self._do_poster_png_file()
+            retrieve_data = RetrieveImdbData(url, title, self.cache_poster)
+            self.synopsis = retrieve_data.synopsis
+            self.cache_poster = retrieve_data.cache_poster
 
     def make_poster_name(self):
         """
@@ -48,28 +41,36 @@ class ParseImdbData:
 
         return self.synopsis
 
+
+class RetrieveImdbData:
+    def __init__(self, url, title, cache_poster):
+        self._url = url
+        self.title = title
+        try:
+            self.soup = BeautifulSoup(self._get_html(), 'html.parser')
+        except TypeError:
+            print("For some reason bs4 says that html file is empty")
+            print("or there is a problem reading the record saved in .cache dir.")
+            print("Please, try again.")
+            print(title)
+        else:
+            self.cache_poster = cache_poster
+            self.synopsis = ''
+            self.bs4_synopsis()
+            if not self.synopsis.startswith('Maybe something is wrong with'):
+                self._do_poster_png_file()
+                AddImdbData(self.title, self.synopsis)
+
     def bs4_synopsis(self):
         try:
             description = self.soup.find('meta', property="og:description")
             self.synopsis = description['content']
-            self.add_synopsis()
         except AttributeError:
             self.synopsis = """
                    Maybe something is wrong with internet connection.
                    Or the imdb .css has changed.
                    A skull and this text, that's it. Try again to confirm.
                    """
-
-    def add_synopsis(self):
-        if self.title in MOVIE_UNSEEN:
-            self.dict_movie_choice(MOVIE_UNSEEN)
-        elif self.title in MOVIE_SEEN:
-            self.dict_movie_choice(MOVIE_SEEN)
-
-    def dict_movie_choice(self, d_movie):
-        movie_info = list(d_movie[self.title])
-        movie_info.insert(1, self.synopsis)
-        d_movie[self.title] = tuple(movie_info)
 
     def _do_poster_png_file(self):
         """
@@ -78,18 +79,25 @@ class ParseImdbData:
         try:
             if not os.path.isfile(self.cache_poster):
                 self._save_poster_file()
-        except urllib.error.URLError:
-            print("Poster - URLError. Try again.")
         except timeout:
             print("Poster - Connection timeout. Try again.")
 
     def _save_poster_file(self):
         img = QImage()  # (8,10,4)
-        img.loadFromData(self._poster_file())
-        img.save(self.cache_poster)
+        try:
+            img.loadFromData(self._poster_file())
+        except TypeError:
+            print('Probably an URLError before')
+        else:
+            img.save(self.cache_poster)
 
     def _poster_file(self):
-        return urllib.request.urlopen(self._poster_url()).read()
+        try:
+            url = self._poster_url()
+            return urllib.request.urlopen(url).read()
+        except URLError:
+            print('URLError for %s' % self.title)
+            return None
 
     def _poster_url(self):
         """
@@ -101,11 +109,13 @@ class ParseImdbData:
             result = re_poster.search(str(poster))
             return result.group(0)
         except AttributeError:
-            # tem que retornar uma url
-            # arquivo local
-            url_err = 'https://static.significados.com.br/'
-            url_err += 'foto/adesivo-caveira-mexicana-caveira-mexicana_th.jpg'
-            return url_err
+            # Falta isso para o split
+            # tem que retornar uma url arquivo local
+            # url_err = 'https://static.significados.com.br/'
+            # url_err += 'foto/adesivo-caveira-mexicana-caveira-mexicana_th.jpg'
+            print('cache_poster goes to skrull image file')
+            self.cache_poster = MOVIE_PLIST_CACHE + '/skrull.jpg'
+            return None
 
     def _get_html(self):
         """
@@ -113,9 +123,27 @@ class ParseImdbData:
         """
         try:
             return urllib.request.urlopen(self._url, timeout=3).read()
-        except urllib.error.URLError:
+        except URLError:
             print("HTML - URLError. Try again.")
         except timeout:
             print("HTML - Connection timeout. Try again.")
         except ValueError:
             print("HTML - Please, check the .desktop file for this movie.")
+
+
+class AddImdbData:
+    def __init__(self, title, synopsis):
+        self.title = title
+        self.synopsis = synopsis
+        self.add_synopsis()
+
+    def add_synopsis(self):
+        if self.title in MOVIE_UNSEEN:
+            self.dict_movie_choice(MOVIE_UNSEEN)
+        elif self.title in MOVIE_SEEN:
+            self.dict_movie_choice(MOVIE_SEEN)
+
+    def dict_movie_choice(self, d_movie):
+        movie_info = list(d_movie[self.title])
+        movie_info.insert(1, self.synopsis)
+        d_movie[self.title] = tuple(movie_info)
