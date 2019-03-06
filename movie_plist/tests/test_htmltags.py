@@ -2,7 +2,6 @@ import os
 
 import pytest
 
-from movie_plist.conf.global_conf import MOVIE_PLIST_CACHE
 from movie_plist.html_file import htmltags
 from movie_plist.html_file.htmltags import HtmlTags
 
@@ -24,6 +23,7 @@ def test_htmltags_class(mocker):
 def build_obj():
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     html_path = os.path.join(base_dir, 'tests/Shawshank_Redemption-1994.html')
+    htmltags.pimdbdata.MOVIE_PLIST_CACHE = os.path.join(base_dir, 'tests/.cache')
     title = 'Shawshank Redemption 1994'
     return HtmlTags('file://' + html_path, title)
 
@@ -39,7 +39,8 @@ def test_htlmtags_attrs(build_obj):
 
 def test_context_has_img_html_tag(build_obj):
     poster_path = build_obj._poster_path
-    assert poster_path == MOVIE_PLIST_CACHE + '/' + 'Shawshank_Redemption_1994.png'
+    expected = htmltags.pimdbdata.MOVIE_PLIST_CACHE + '/' + 'Shawshank_Redemption_1994.png'
+    assert poster_path == expected
     assert "<img src=\"" + poster_path + "\">" in build_obj.context
 
 
