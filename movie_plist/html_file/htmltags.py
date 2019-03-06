@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import textwrap
 
-from movie_plist.data import pimdbdata
+from movie_plist.data.pimdbdata import ParseImdbData
 
 
 class HtmlTags:
@@ -25,7 +25,7 @@ class HtmlTags:
         self._bottom_tags()
 
     def _get_synopsis(self):
-        html_movie = pimdbdata.ParseImdbData(self._url, self.title)
+        html_movie = ParseImdbData(self._url, self.title)
         self._poster_path = html_movie.cache_poster
         self._synopsis = html_movie.synopsis
 
