@@ -159,9 +159,8 @@ def test_add_synopsis_attr(add, mocker):
     assert add.call_count == 1
 
 
-@patch('movie_plist.data.pimdbdata.RetrieveImdbData._do_poster_png_file')
 @patch('movie_plist.data.pimdbdata.RetrieveImdbData.bs4_synopsis')
-def test_description_content(bs4_synopsis, do_poster_file, mocker):
+def test_description_content(bs4_synopsis, mocker):
     """
     What happens when synopsis does not exists
     """
@@ -169,7 +168,6 @@ def test_description_content(bs4_synopsis, do_poster_file, mocker):
     mocker.patch.object(ParseImdbData, 'synopsis_exists', return_value=False)
     ParseImdbData('url', 'title')
     assert bs4_synopsis.call_count == 1
-    assert do_poster_file.call_count == 1
 
 
 @patch('movie_plist.data.pimdbdata.RetrieveImdbData._save_poster_file')
