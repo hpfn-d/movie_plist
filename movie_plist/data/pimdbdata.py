@@ -46,6 +46,12 @@ class RetrieveImdbData:
     def __init__(self, url, title, cache_poster):
         self._url = url
         self.title = title
+        self.cache_poster = MOVIE_PLIST_CACHE + '/skrull.jpg'
+
+        self.synopsis = 'Maybe something is wrong with internet connection.'
+        self.synopsis += 'Url problem. Or the imdb .css has changed.'
+        self.synopsis += 'A skrull and this text, that\'s it. Try again to confirm.'
+
         try:
             self.soup = BeautifulSoup(self._get_html(), 'html.parser')
         except TypeError:
@@ -54,10 +60,9 @@ class RetrieveImdbData:
             print("Please, try again.")
             print(title)
         else:
-            self.cache_poster = cache_poster
-            self.synopsis = ''
             self.bs4_synopsis()
             if not self.synopsis.startswith('Maybe something is wrong with'):
+                self.cache_poster = cache_poster
                 self._do_poster_png_file()
                 AddImdbData(self.title, self.synopsis)
 
@@ -66,11 +71,7 @@ class RetrieveImdbData:
             description = self.soup.find('meta', property="og:description")
             self.synopsis = description['content']
         except AttributeError:
-            self.synopsis = """
-                   Maybe something is wrong with internet connection.
-                   Or the imdb .css has changed.
-                   A skull and this text, that's it. Try again to confirm.
-                   """
+            print("synopsis already set with a message")
 
     def _do_poster_png_file(self):
         """
@@ -114,7 +115,6 @@ class RetrieveImdbData:
             # url_err = 'https://static.significados.com.br/'
             # url_err += 'foto/adesivo-caveira-mexicana-caveira-mexicana_th.jpg'
             print('cache_poster goes to skrull image file')
-            self.cache_poster = MOVIE_PLIST_CACHE + '/skrull.jpg'
             return None
 
     def _get_html(self):
