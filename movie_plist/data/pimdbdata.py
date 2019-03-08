@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 import os
 import re
-import urllib.request
 from _socket import timeout
 from urllib.error import URLError
+from urllib.request import urlopen
 
 from bs4 import BeautifulSoup
 from PyQt5.QtGui import QImage  # pylint: disable-msg=E0611
@@ -15,14 +15,14 @@ from movie_plist.data.pyscan import MOVIE_SEEN, MOVIE_UNSEEN
 class ParseImdbData:
     def __init__(self, url, title):
         """
-        receive an url to be
+
         """
         self._url = url
         self.title = title
         self.synopsis = ''
         self.cache_poster = self.make_poster_name()
         if not self.synopsis_exists():
-            retrieve_data = RetrieveImdbData(url, title, self.cache_poster)
+            retrieve_data = FetchImdbData(url, title, self.cache_poster)
             self.synopsis = retrieve_data.synopsis
             self.cache_poster = retrieve_data.cache_poster
 
@@ -42,27 +42,39 @@ class ParseImdbData:
         return self.synopsis
 
 
-class RetrieveImdbData:
+class FetchImdbData:
     def __init__(self, url, title, cache_poster):
         self._url = url
         self.title = title
+        self.dflt = cache_poster
         self.cache_poster = MOVIE_PLIST_CACHE + '/skrull.jpg'
 
-        self.synopsis = 'Maybe something is wrong with internet connection.'
-        self.synopsis += 'Url problem. Or the imdb .css has changed.'
-        self.synopsis += 'A skrull and this text, that\'s it. Try again to confirm.'
+        self.synopsis = """Maybe something is wrong with internet connection. Or:
+        - url problem
+        - the imdb .css has changed
+
+        A skrull and this text. Please try again.
+        """
+
+        self.soup = ''
+        self.fetch()
+
+    def fetch(self):
 
         try:
             self.soup = BeautifulSoup(self._get_html(), 'html.parser')
         except TypeError:
-            print("For some reason bs4 says that html file is empty")
-            print("or there is a problem reading the record saved in .cache dir.")
-            print("Please, try again.")
-            print(title)
+            text = """
+            For some reason bs4 says that html file is empty
+            or there is a problem reading the record saved in .cache dir.
+            Please, try again.
+            """
+            print(text)
+            print(self.title)
         else:
             self.bs4_synopsis()
             if not self.synopsis.startswith('Maybe something is wrong with'):
-                self.cache_poster = cache_poster
+                self.cache_poster = self.dflt
                 self._do_poster_png_file()
                 AddImdbData(self.title, self.synopsis)
 
@@ -95,10 +107,15 @@ class RetrieveImdbData:
     def _poster_file(self):
         try:
             url = self._poster_url()
-            return urllib.request.urlopen(url).read()
+            read_url = urlopen(url, timeout=3).read()
         except URLError:
             print('URLError for %s' % self.title)
-            return None
+        except timeout:
+            print("Poster File - Connection timeout. Try again.")
+        else:
+            return read_url
+
+        return None
 
     def _poster_url(self):
         """
@@ -110,8 +127,7 @@ class RetrieveImdbData:
             result = re_poster.search(str(poster))
             return result.group(0)
         except AttributeError:
-            # Falta isso para o split
-            # tem que retornar uma url arquivo local
+            # repository has as skrull.jpg
             # url_err = 'https://static.significados.com.br/'
             # url_err += 'foto/adesivo-caveira-mexicana-caveira-mexicana_th.jpg'
             print('cache_poster goes to skrull image file')
@@ -122,13 +138,17 @@ class RetrieveImdbData:
 
         """
         try:
-            return urllib.request.urlopen(self._url, timeout=3).read()
+            url = urlopen(self._url, timeout=3).read()
         except URLError:
             print("HTML - URLError. Try again.")
         except timeout:
             print("HTML - Connection timeout. Try again.")
         except ValueError:
             print("HTML - Please, check the .desktop file for this movie.")
+        else:
+            return url
+
+        return None
 
 
 class AddImdbData:
