@@ -21,9 +21,7 @@ expected = [
 
     # FetchImdbData methods
     hasattr(pimdbdata.FetchImdbData, 'fetch'),
-    hasattr(pimdbdata.FetchImdbData, 'bs4_synopsis'),
     hasattr(pimdbdata.FetchImdbData, '_do_poster_png_file'),
-    hasattr(pimdbdata.FetchImdbData, '_save_poster_file'),
     hasattr(pimdbdata.FetchImdbData, '_poster_url'),
     hasattr(pimdbdata.FetchImdbData, '_poster_file'),
 
@@ -80,10 +78,6 @@ def run_init():
     html_path = os.path.join(base_dir, 'tests/Shawshank_Redemption-1994.html')
     title = 'Shawshank Redemption 1994'
     return ParseImdbData('file://' + html_path, title)
-
-
-# def test_init_title_year(run_init):
-#    assert 'Um Sonho de Liberdade (1994)' == run_init.title_year()
 
 
 def test_init_synopsys(run_init):
@@ -160,45 +154,34 @@ def test_add_synopsis_attr(add, mocker):
     assert add.call_count == 1
 
 
-@patch('movie_plist.data.pimdbdata.FetchImdbData.bs4_synopsis')
-def test_description_content(bs4_synopsis, mocker):
+@patch('movie_plist.data.pimdbdata.BeautifulSoup')
+def test_description_content(poster_png, mocker):
     """
     What happens when synopsis does not exists
     """
-    mocker.patch.object(pimdbdata, 'BeautifulSoup', return_value=str())
+    mocker.patch.object(pimdbdata, 'QImage')
+    mocker.patch.object(FetchImdbData, '_poster_url')
+    mocker.patch.object(FetchImdbData, '_poster_file')
     mocker.patch.object(ParseImdbData, 'synopsis_exists', return_value=False)
     ParseImdbData('url', 'title')
-    assert bs4_synopsis.call_count == 1
+    assert poster_png.call_count == 1
 
 
-@patch('movie_plist.data.pimdbdata.FetchImdbData._save_poster_file')
-def test_do_not_save_poster_steps(save_file, run_fetch, mocker):
+@patch('movie_plist.data.pimdbdata.QImage')
+def test_no_poster_steps(save_img, run_fetch, mocker):
     """
     A poster exists. Do nothing.
     """
     mocker.patch.object(os.path, 'isfile', return_value=True)
     run_fetch._do_poster_png_file()
-    assert save_file.call_count == 0
-
-
-@patch('movie_plist.data.pimdbdata.FetchImdbData._save_poster_file')
-def test_do_save_poster_call(save_file, run_fetch, mocker):
-    """
-    There is no poster yet. Create one and save it
-    What is done when _save_poster_file is called
-    """
-    mocker.patch.object(os.path, 'isfile', return_value=False)
-    run_fetch._do_poster_png_file()
-    assert save_file.call_count == 1
+    assert save_img.call_count == 0
 
 
 @patch('movie_plist.data.pimdbdata.QImage')
-def test_do_save_poster_steps(img_mock, run_fetch):
+def test_do_poster_steps(save_img, run_fetch, mocker):
     """
     There is no poster yet. Create one and save it
-    What is done when _save_poster_file is called
     """
-    run_fetch._save_poster_file()
-    assert img_mock.call_count == 1
-    img_mock.assert_has_calls(img_mock.loadFromData)
-    img_mock.assert_has_calls(img_mock.save)
+    mocker.patch.object(os.path, 'isfile', return_value=False)
+    run_fetch._do_poster_png_file()
+    assert save_img.call_count == 1
