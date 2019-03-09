@@ -1,7 +1,7 @@
 [![Build Status](https://travis-ci.org/hpfn-d/movie_plist.svg?branch=master)](https://travis-ci.org/hpfn-d/movie_plist)
 [![Updates](https://pyup.io/repos/github/hpfn-d/movie_plist/shield.svg)](https://pyup.io/repos/github/hpfn-d/movie_plist/)
 [![Python 3](https://pyup.io/repos/github/hpfn-d/movie_plist/python-3-shield.svg)](https://pyup.io/repos/github/hpfn-d/movie_plist/)
-[![Build Status](https://travis-ci.org/hpfn-d/movie_plist.svg?branch=master)](https://travis-ci.org/hpfn-d/movie_plist)
+[![codecov](https://codecov.io/gh/hpfn-d/movie_plist/branch/master/graph/badge.svg)](https://codecov.io/gh/hpfn-d/movie_plist)
 
 
 On a Debian Stretch.
