@@ -83,9 +83,12 @@ class FetchImdbData:
 
         """
         if not os.path.isfile(self.cache_poster):
-            img = QImage()  # (8,10,4)
-            img.loadFromData(self._poster_file())
-            img.save(self.cache_poster)
+            try:
+                img = QImage()  # (8,10,4)
+                img.loadFromData(self._poster_file())
+                img.save(self.cache_poster)
+            except TypeError:
+                print('QImage - Unexpected type str. Please try again.')
 
     def _poster_file(self):
         try:
@@ -99,7 +102,7 @@ class FetchImdbData:
             return read_url
 
         # this is not the type expected by QImage.loadFromData
-        return None
+        return ''
 
     def _get_html(self):
         """
