@@ -22,7 +22,7 @@ expected = [
     # FetchImdbData methods
     hasattr(pimdbdata.FetchImdbData, 'fetch'),
     hasattr(pimdbdata.FetchImdbData, '_do_poster_png_file'),
-    # hasattr(pimdbdata.FetchImdbData, '_poster_url'),
+    hasattr(pimdbdata.FetchImdbData, '_poster_url'),
     hasattr(pimdbdata.FetchImdbData, '_poster_file'),
 
 ]
@@ -136,12 +136,12 @@ def run_fetch(mocker):
     return FetchImdbData('file://' + html_path, title, cache_poster)
 
 
-# def test_init_poster_url(run_fetch):
-#     poster_url = 'https://m.media-amazon.com/images/'
-#     poster_url += 'M/MV5BMDFkYTc0MGEtZmNhMC00ZDIzLWFm'
-#     poster_url += 'NTEtODM1ZmRlYWMwMWFmXkEyXkFqcGdeQXVyMTMxODk2OTU'
-#     poster_url += '@._V1_UX182_CR0,0,182,268_AL_.jpg'
-#     assert poster_url == run_fetch._poster_url()
+def test_init_poster_url(run_fetch):
+    poster_url = 'https://m.media-amazon.com/images/'
+    poster_url += 'M/MV5BMDFkYTc0MGEtZmNhMC00ZDIzLWFm'
+    poster_url += 'NTEtODM1ZmRlYWMwMWFmXkEyXkFqcGdeQXVyMTMxODk2OTU'
+    poster_url += '@._V1_UX182_CR0,0,182,268_AL_.jpg'
+    assert poster_url == run_fetch._poster_url()
 
 
 @patch('movie_plist.data.pimdbdata.FetchImdbData')
@@ -160,7 +160,7 @@ def test_description_content(poster_png, mocker):
     What happens when synopsis does not exists
     """
     mocker.patch.object(pimdbdata, 'QImage')
-    # mocker.patch.object(FetchImdbData, '_poster_url')
+    mocker.patch.object(FetchImdbData, '_poster_url')
     mocker.patch.object(FetchImdbData, '_poster_file')
     mocker.patch.object(ParseImdbData, 'synopsis_exists', return_value=False)
     ParseImdbData('url', 'title')

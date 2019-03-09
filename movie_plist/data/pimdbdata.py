@@ -92,30 +92,28 @@ class FetchImdbData:
 
     def _poster_file(self):
         try:
-            find = re.search(r'\bhttp\S+jpg\b', str(self.bs4_poster))
-            url = find.group(0)
-            read_url = urlopen(url, timeout=3).read()
+            return urlopen(self._poster_url(), timeout=3).read()
         except (URLError, timeout, TypeError) as e:
             print(e)
             print("Poster File method error.")
-        else:
-            return read_url
 
         # this is not the type expected by QImage.loadFromData
         return ''
+
+    def _poster_url(self):
+        find_url = re.search(r'\bhttp\S+jpg\b', str(self.bs4_poster))
+        return find_url.group(0)
 
     def _get_html(self):
         """
 
         """
         try:
-            url = urlopen(self._url, timeout=3).read()
+            return urlopen(self._url, timeout=3).read()
         except (URLError, timeout, ValueError) as e:
             text = "Internet or {}.desktop file problem".format(self.title)
             print(e)
             print(text)
-        else:
-            return url
 
         return None
 
