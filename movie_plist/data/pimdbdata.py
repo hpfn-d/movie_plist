@@ -115,8 +115,8 @@ class FetchImdbData:
             url = urlopen(self._url, timeout=3).read()
         except (URLError, timeout, ValueError) as e:
             text = "Internet or {}.desktop file problem".format(self.title)
-            print(text)
             print(e)
+            print(text)
         else:
             return url
 
