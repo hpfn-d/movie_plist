@@ -46,92 +46,66 @@ class FetchImdbData:
     def __init__(self, url, title, cache_poster):
         self._url = url
         self.title = title
+        self.bs4_poster = ''
         self.dflt = cache_poster
         self.cache_poster = MOVIE_PLIST_CACHE + '/skrull.jpg'
 
-        self.synopsis = """Maybe something is wrong with internet connection. Or:
-        - url problem
-        - the imdb .css has changed
+        self.synopsis = """Maybe something is wrong with
+        internet connection, url problem, the imdb .css file.
+        A skrull and this text. Please try again."""
 
-        A skrull and this text. Please try again.
-        """
-
-        self.soup = ''
         self.fetch()
 
     def fetch(self):
 
         try:
-            self.soup = BeautifulSoup(self._get_html(), 'html.parser')
-        except TypeError:
+            soup = BeautifulSoup(self._get_html(), 'html.parser')
+            description = soup.find('meta', property="og:description")
+            self.synopsis = description['content']
+            self.bs4_poster = soup.find('div', class_="poster")
+        except (TypeError, AttributeError) as e:
             text = """
             For some reason bs4 says that html file is empty
-            or there is a problem reading the record saved in .cache dir.
+            or there is a problem reading the record saved in .cache dir,
+            or internet problem.
             Please, try again.
             """
+            print(e)
             print(text)
             print(self.title)
         else:
-            self.bs4_synopsis()
-            if not self.synopsis.startswith('Maybe something is wrong with'):
-                self.cache_poster = self.dflt
-                self._do_poster_png_file()
-                AddImdbData(self.title, self.synopsis)
-
-    def bs4_synopsis(self):
-        try:
-            description = self.soup.find('meta', property="og:description")
-            self.synopsis = description['content']
-        except AttributeError:
-            print("synopsis already set with a message")
+            self.cache_poster = self.dflt
+            self._do_poster_png_file()
+            AddImdbData(self.title, self.synopsis)
 
     def _do_poster_png_file(self):
         """
 
         """
-        try:
-            if not os.path.isfile(self.cache_poster):
-                self._save_poster_file()
-        except timeout:
-            print("Poster - Connection timeout. Try again.")
-
-    def _save_poster_file(self):
-        img = QImage()  # (8,10,4)
-        try:
+        if not os.path.isfile(self.cache_poster):
+            img = QImage()  # (8,10,4)
             img.loadFromData(self._poster_file())
-        except TypeError:
-            print('Probably an URLError before')
-        else:
             img.save(self.cache_poster)
 
     def _poster_file(self):
         try:
             url = self._poster_url()
             read_url = urlopen(url, timeout=3).read()
-        except URLError:
-            print('URLError for %s' % self.title)
-        except timeout:
-            print("Poster File - Connection timeout. Try again.")
+        except (URLError, timeout, TypeError) as e:
+            print(e)
+            print("Poster File method error.")
         else:
             return read_url
 
+        # this is not the type expected by QImage.loadFromData
         return None
 
     def _poster_url(self):
         """
 
         """
-        try:
-            poster = self.soup.find('div', class_="poster")
-            re_poster = re.compile(r'\bhttp\S+jpg\b')
-            result = re_poster.search(str(poster))
-            return result.group(0)
-        except AttributeError:
-            # repository has as skrull.jpg
-            # url_err = 'https://static.significados.com.br/'
-            # url_err += 'foto/adesivo-caveira-mexicana-caveira-mexicana_th.jpg'
-            print('cache_poster goes to skrull image file')
-            return None
+        result = re.search(r'\bhttp\S+jpg\b', str(self.bs4_poster))
+        return result.group(0)
 
     def _get_html(self):
         """
@@ -139,12 +113,10 @@ class FetchImdbData:
         """
         try:
             url = urlopen(self._url, timeout=3).read()
-        except URLError:
-            print("HTML - URLError. Try again.")
-        except timeout:
-            print("HTML - Connection timeout. Try again.")
-        except ValueError:
-            print("HTML - Please, check the .desktop file for this movie.")
+        except (URLError, timeout, ValueError) as e:
+            text = "Internet or {}.desktop file problem".format(self.title)
+            print(text)
+            print(e)
         else:
             return url
 
