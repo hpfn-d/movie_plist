@@ -47,21 +47,21 @@ class FetchImdbData:
         self._url = url
         self.title = title
         self.bs4_poster = ''
-        self.dflt = cache_poster
+        # self.dflt = cache_poster
         self.cache_poster = MOVIE_PLIST_CACHE + '/skrull.jpg'
 
         self.synopsis = """Maybe something is wrong with
         internet connection, url problem, the imdb .css file.
         A skrull and this text. Please try again."""
 
-        self.fetch()
+        self.fetch(cache_poster)
 
-    def fetch(self):
+    def fetch(self, cache_poster):
 
         try:
             soup = BeautifulSoup(self._get_html(), 'html.parser')
             description = soup.find('meta', property="og:description")
-            self.synopsis = description['content']
+            # self.synopsis = description['content']
             self.bs4_poster = soup.find('div', class_="poster")
         except (TypeError, AttributeError) as e:
             text = """
@@ -74,7 +74,8 @@ class FetchImdbData:
             print(text)
             print(self.title)
         else:
-            self.cache_poster = self.dflt
+            self.synopsis = description['content']
+            self.cache_poster = cache_poster
             self._do_poster_png_file()
             AddImdbData(self.title, self.synopsis)
 
