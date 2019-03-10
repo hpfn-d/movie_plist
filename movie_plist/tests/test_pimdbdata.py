@@ -4,9 +4,7 @@ from unittest.mock import patch
 import pytest
 
 from movie_plist.data import pimdbdata
-from movie_plist.data.pimdbdata import (
-    AddImdbData, FetchImdbData, ParseImdbData
-)
+from movie_plist.data.pimdbdata import FetchImdbData, ParseImdbData
 
 expected = [
 
@@ -18,13 +16,14 @@ expected = [
     # ParseOmdbData methods
     hasattr(pimdbdata.ParseImdbData, 'synopsis_exists'),
     hasattr(pimdbdata.ParseImdbData, 'make_poster_name'),
+    hasattr(pimdbdata.ParseImdbData, 'add_synopsis'),
+    hasattr(pimdbdata.ParseImdbData, 'dict_movie_choice'),
 
     # FetchImdbData methods
     hasattr(pimdbdata.FetchImdbData, 'fetch'),
     hasattr(pimdbdata.FetchImdbData, '_do_poster_png_file'),
     hasattr(pimdbdata.FetchImdbData, '_poster_url'),
     hasattr(pimdbdata.FetchImdbData, '_poster_file'),
-
 ]
 
 
@@ -69,6 +68,32 @@ def test_synopsis_exists():
     assert obj.cache_poster.endswith('movie_plist/tests/.cache/title.png')
 
 
+def test_choice_unseen():
+    """
+    A record exists and it goes to an unseen movie dict
+    """
+    title = 'Shawshank Redemption 1994'
+    pimdbdata.MOVIE_UNSEEN[title] = ('root/',)
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    html_path = os.path.join(base_dir, 'tests/Shawshank_Redemption-1994.html')
+    ParseImdbData('file://' + html_path, title)
+    assert 'Directed by Frank Darabont' in pimdbdata.MOVIE_UNSEEN[title][1]
+    del pimdbdata.MOVIE_UNSEEN[title]
+
+
+def test_choice_seen():
+    """
+    A record exists and it goes to a seen movie dict
+    """
+    title = 'Shawshank Redemption 1994'
+    pimdbdata.MOVIE_SEEN[title] = ('root/',)
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    html_path = os.path.join(base_dir, 'tests/Shawshank_Redemption-1994.html')
+    ParseImdbData('file://' + html_path, title)
+    assert 'Directed by Frank Darabont' in pimdbdata.MOVIE_SEEN[title][1]
+    del pimdbdata.MOVIE_SEEN[title]
+
+
 @pytest.fixture
 def run_init():
     """
@@ -102,26 +127,6 @@ def test_choice_no_made(run_init):
     """
 
     assert run_init.title not in pimdbdata.MOVIE_UNSEEN
-
-
-def test_choice_unseen(run_init):
-    """
-    A record exists and it goes to an unseen movie dict
-    """
-    pimdbdata.MOVIE_UNSEEN[run_init.title] = ('root/',)
-    AddImdbData(run_init.title, 'Directed')
-    assert 'Directed' in pimdbdata.MOVIE_UNSEEN[run_init.title][1]
-    del pimdbdata.MOVIE_UNSEEN[run_init.title]
-
-
-def test_choice_seen(run_init):
-    """
-    A record exists and it goes to a seen movie dict
-    """
-    pimdbdata.MOVIE_SEEN[run_init.title] = ('root/',)
-    AddImdbData(run_init.title, 'Directed')
-    assert 'Directed' in pimdbdata.MOVIE_SEEN[run_init.title][1]
-    del pimdbdata.MOVIE_SEEN[run_init.title]
 
 
 # FetchImdbData tests
