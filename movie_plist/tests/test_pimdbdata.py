@@ -16,14 +16,14 @@ expected = [
     # ParseOmdbData methods
     hasattr(pimdbdata.ParseImdbData, 'synopsis_exists'),
     hasattr(pimdbdata.ParseImdbData, 'make_poster_name'),
-    hasattr(pimdbdata.ParseImdbData, 'add_synopsis'),
-    hasattr(pimdbdata.ParseImdbData, 'dict_movie_choice'),
 
     # FetchImdbData methods
     hasattr(pimdbdata.FetchImdbData, 'fetch'),
     hasattr(pimdbdata.FetchImdbData, '_do_poster_png_file'),
     hasattr(pimdbdata.FetchImdbData, '_poster_url'),
     hasattr(pimdbdata.FetchImdbData, '_poster_file'),
+    hasattr(pimdbdata.FetchImdbData, 'add_synopsis'),
+    hasattr(pimdbdata.FetchImdbData, 'dict_movie_choice'),
 ]
 
 

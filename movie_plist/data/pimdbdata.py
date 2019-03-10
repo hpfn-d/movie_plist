@@ -25,7 +25,6 @@ class ParseImdbData:
             retrieve_data = FetchImdbData(url, title, self.cache_poster)
             self.synopsis = retrieve_data.synopsis
             self.cache_poster = retrieve_data.cache_poster
-            self.add_synopsis()
 
     def make_poster_name(self):
         """
@@ -41,17 +40,6 @@ class ParseImdbData:
             self.synopsis = all_movies[self.title][1]
 
         return self.synopsis
-
-    def add_synopsis(self):
-        if self.title in MOVIE_UNSEEN:
-            self.dict_movie_choice(MOVIE_UNSEEN)
-        elif self.title in MOVIE_SEEN:
-            self.dict_movie_choice(MOVIE_SEEN)
-
-    def dict_movie_choice(self, d_movie):
-        movie_info = list(d_movie[self.title])
-        movie_info.insert(1, self.synopsis)
-        d_movie[self.title] = tuple(movie_info)
 
 
 class FetchImdbData:
@@ -99,6 +87,8 @@ class FetchImdbData:
                 img.save(self.cache_poster)
             except TypeError:
                 print('QImage - Unexpected type str. Please try again.')
+            else:
+                self.add_synopsis()
 
     def _poster_file(self):
         try:
@@ -126,3 +116,14 @@ class FetchImdbData:
             print(text)
 
         return None
+
+    def add_synopsis(self):
+        if self.title in MOVIE_UNSEEN:
+            self.dict_movie_choice(MOVIE_UNSEEN)
+        elif self.title in MOVIE_SEEN:
+            self.dict_movie_choice(MOVIE_SEEN)
+
+    def dict_movie_choice(self, d_movie):
+        movie_info = list(d_movie[self.title])
+        movie_info.insert(1, self.synopsis)
+        d_movie[self.title] = tuple(movie_info)
