@@ -8,7 +8,6 @@ On a Debian Stretch.
 
  - TODO list: 
     - search
-    - update status bar from menu
  
 - less internet:
   - Directory name as title year for qtlist showed.
