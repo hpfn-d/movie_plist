@@ -33,4 +33,4 @@ MOVIE_UNSEEN = load_from_json(UNSEEN_JSON_FILE)
 
 def dump_json_movie(movie_dic, json_file):
     with open(json_file, 'w') as outfile:
-        json.dump(movie_dic, outfile)
+        json.dump(movie_dic, outfile, sort_keys=True)
