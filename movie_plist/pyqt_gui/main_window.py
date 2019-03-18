@@ -53,7 +53,7 @@ class Window(QMainWindow):
         # botão 'unseen'
         self.two_lines.top.clear()
         self.two_lines.current_dict = MOVIE_UNSEEN
-        self.two_lines.top.addItems(sorted(MOVIE_UNSEEN.keys()))
+        self.two_lines.top.addItems(MOVIE_UNSEEN.keys())
         self.two_lines.top.setCurrentRow(0)
         self.update_statusbar()
 
@@ -62,7 +62,7 @@ class Window(QMainWindow):
         if MOVIE_SEEN:
             self.two_lines.top.clear()
             self.two_lines.current_dict = MOVIE_SEEN
-            self.two_lines.top.addItems(sorted(MOVIE_SEEN.keys()))
+            self.two_lines.top.addItems(MOVIE_SEEN.keys())
             self.two_lines.top.setCurrentRow(0)
             self.update_statusbar()
 

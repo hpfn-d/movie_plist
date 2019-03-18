@@ -24,10 +24,10 @@ class TwoLines(QWidget):
         self.top = QListWidget()
         if MOVIE_UNSEEN:
             self.current_dict = MOVIE_UNSEEN
-            self.current_list = sorted(MOVIE_UNSEEN.keys())
+            self.current_list = MOVIE_UNSEEN.keys()
         else:
             self.current_dict = MOVIE_SEEN
-            self.current_list = sorted(MOVIE_SEEN.keys())
+            self.current_list = MOVIE_SEEN.keys()
 
         self.tabs = QTabWidget()
         self.bottom = QLabel()
