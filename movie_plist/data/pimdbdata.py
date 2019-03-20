@@ -1,3 +1,5 @@
+import os
+
 from movie_plist.conf.global_conf import MOVIE_PLIST_CACHE
 
 from .fetch_data import MOVIE_SEEN, MOVIE_UNSEEN, FetchImdbData
@@ -19,10 +21,13 @@ class ParseImdbData:
 
     def run(self):
         self.make_poster_name()
-        if not self.synopsis_exists():
+        # if not self.synopsis_exists():
+        if not os.path.isfile(self.cache_poster):
             retrieve_data = FetchImdbData(self._url, self.title, self.cache_poster)
             self.synopsis = retrieve_data.synopsis
             self.cache_poster = retrieve_data.cache_poster
+        else:
+            self.synopsis_exists()
 
     def make_poster_name(self):
         """
@@ -34,7 +39,7 @@ class ParseImdbData:
 
     def synopsis_exists(self):
         all_movies = {**MOVIE_UNSEEN, **MOVIE_SEEN}
-        if self.title in all_movies and len(all_movies[self.title]) == 3:
-            self.synopsis = all_movies[self.title][1]
+        # if self.title in all_movies and len(all_movies[self.title]) == 3:
+        self.synopsis = all_movies[self.title][1]
 
-        return self.synopsis
+        # return self.synopsis

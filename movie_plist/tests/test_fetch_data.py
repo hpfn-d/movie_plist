@@ -1,11 +1,10 @@
-import os
 from unittest.mock import patch
 
 import pytest
 
-from movie_plist.data import fetch_data
+from movie_plist.data import fetch_data, pimdbdata
 from movie_plist.data.fetch_data import FetchImdbData
-from movie_plist.data.pimdbdata import ParseImdbData
+from movie_plist.data.pimdbdata import ParseImdbData, os
 
 expected = [
 
@@ -52,10 +51,10 @@ def test_init_poster_url(run_fetch):
 @patch('movie_plist.data.pimdbdata.FetchImdbData')
 def test_add_synopsis_attr(add, mocker):
     """
-    When synopsis does not exists call FetchImdbData
+    When imdb data does not exists call FetchImdbData
     It is a kind of integration test
     """
-    mocker.patch.object(ParseImdbData, 'synopsis_exists', return_value=False)
+    mocker.patch.object(pimdbdata.os.path, 'isfile', return_value=False)
     ParseImdbData('url', 'title')
     assert add.call_count == 1
 
@@ -63,25 +62,15 @@ def test_add_synopsis_attr(add, mocker):
 @patch('movie_plist.data.fetch_data.BeautifulSoup')
 def test_description_content(poster_png, mocker):
     """
-    What happens when synopsis does not exists
+    What happens when imdb data does not exists
     It is a kind of integration test
     """
+    mocker.patch.object(pimdbdata.os.path, 'isfile', return_value=False)
     mocker.patch.object(fetch_data, 'QImage')
     mocker.patch.object(FetchImdbData, '_poster_url')
     mocker.patch.object(FetchImdbData, '_poster_file')
-    mocker.patch.object(ParseImdbData, 'synopsis_exists', return_value=False)
     ParseImdbData('url', 'title')
     assert poster_png.call_count == 1
-
-
-@patch('movie_plist.data.fetch_data.QImage')
-def test_no_poster_steps(save_img, run_fetch, mocker):
-    """
-    A poster exists. Do nothing.
-    """
-    mocker.patch.object(os.path, 'isfile', return_value=True)
-    run_fetch._do_poster_png_file()
-    assert save_img.call_count == 0
 
 
 @patch('movie_plist.data.fetch_data.QImage')
@@ -89,6 +78,5 @@ def test_do_poster_steps(save_img, run_fetch, mocker):
     """
     There is no poster yet. Create one and save it
     """
-    mocker.patch.object(os.path, 'isfile', return_value=False)
     run_fetch._do_poster_png_file()
     assert save_img.call_count == 1
