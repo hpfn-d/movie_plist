@@ -13,9 +13,14 @@ class ParseImdbData:
         self._url = url
         self.title = title
         self.synopsis = ''
-        self.cache_poster = self.make_poster_name()
+        self.cache_poster = ''
+
+        self.run()
+
+    def run(self):
+        self.make_poster_name()
         if not self.synopsis_exists():
-            retrieve_data = FetchImdbData(url, title, self.cache_poster)
+            retrieve_data = FetchImdbData(self._url, self.title, self.cache_poster)
             self.synopsis = retrieve_data.synopsis
             self.cache_poster = retrieve_data.cache_poster
 
@@ -25,7 +30,7 @@ class ParseImdbData:
         """
         count_spaces = self.title.count(' ')
         cache_name = self.title.replace(' ', '_', count_spaces)
-        return MOVIE_PLIST_CACHE + '/' + cache_name + '.png'
+        self.cache_poster = MOVIE_PLIST_CACHE + '/' + cache_name + '.png'
 
     def synopsis_exists(self):
         all_movies = {**MOVIE_UNSEEN, **MOVIE_SEEN}
