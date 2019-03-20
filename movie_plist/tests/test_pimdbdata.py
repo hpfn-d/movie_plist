@@ -45,10 +45,11 @@ def test_poster_url(init_mocked):
     assert fetch_data.MOVIE_PLIST_CACHE + '/skrull.jpg' == init_mocked.cache_poster
 
 
-def test_synopsis_exists():
+def test_synopsis_exists(mocker):
     """
-    Synopsis exists. Do nothing.
+    Imdb data exists. Do nothing.
     """
+    mocker.patch.object(pimdbdata.os.path, 'isfile', return_value=True)
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     pimdbdata.MOVIE_PLIST_CACHE = os.path.join(base_dir, 'tests/.cache')
     pimdbdata.MOVIE_UNSEEN = dict(

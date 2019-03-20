@@ -1,4 +1,3 @@
-import os
 import re
 from _socket import timeout
 from urllib.error import URLError
@@ -50,15 +49,14 @@ class FetchImdbData:
         """
 
         """
-        if not os.path.isfile(self.cache_poster):
-            try:
-                img = QImage()  # (8,10,4)
-                img.loadFromData(self._poster_file())
-                img.save(self.cache_poster)
-            except TypeError:
-                print('QImage - Unexpected type str. Please try again.')
-            else:
-                add_synopsis(self.title, self.synopsis)
+        try:
+            img = QImage()  # (8,10,4)
+            img.loadFromData(self._poster_file())
+            img.save(self.cache_poster)
+        except TypeError:
+            print('QImage - Unexpected type str. Please try again.')
+        else:
+            add_synopsis(self.title, self.synopsis)
 
     def _poster_file(self):
         try:
