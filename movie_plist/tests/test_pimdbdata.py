@@ -1,14 +1,12 @@
 import os
-from unittest.mock import patch
 
 import pytest
 
-from movie_plist.data import pimdbdata
-from movie_plist.data.pimdbdata import FetchImdbData, ParseImdbData
+from movie_plist.data import fetch_data, pimdbdata
+from movie_plist.data.pimdbdata import ParseImdbData
 
 expected = [
 
-    hasattr(pimdbdata, 'BeautifulSoup'),
     hasattr(pimdbdata, 'MOVIE_SEEN'),
     hasattr(pimdbdata, 'MOVIE_UNSEEN'),
     hasattr(pimdbdata, 'MOVIE_PLIST_CACHE'),
@@ -17,13 +15,6 @@ expected = [
     hasattr(pimdbdata.ParseImdbData, 'synopsis_exists'),
     hasattr(pimdbdata.ParseImdbData, 'make_poster_name'),
 
-    # FetchImdbData methods
-    hasattr(pimdbdata.FetchImdbData, 'fetch'),
-    hasattr(pimdbdata.FetchImdbData, '_do_poster_png_file'),
-    hasattr(pimdbdata.FetchImdbData, '_poster_url'),
-    hasattr(pimdbdata.FetchImdbData, '_poster_file'),
-    hasattr(pimdbdata.FetchImdbData, 'add_synopsis'),
-    hasattr(pimdbdata.FetchImdbData, 'dict_movie_choice'),
 ]
 
 
@@ -39,8 +30,8 @@ def init_mocked(mocker):
     """
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     pimdbdata.MOVIE_PLIST_CACHE = os.path.join(base_dir, 'home/.cache/movie_plist')
-    mocker.patch.object(pimdbdata, 'urlopen')
-    mocker.patch.object(pimdbdata, 'BeautifulSoup', return_value=None)
+    mocker.patch.object(fetch_data, 'urlopen')
+    mocker.patch.object(fetch_data, 'BeautifulSoup', return_value=None)
 
     return ParseImdbData('url', 'title 1999')
 
@@ -50,7 +41,7 @@ def test_synopsis(init_mocked):
 
 
 def test_poster_url(init_mocked):
-    assert pimdbdata.MOVIE_PLIST_CACHE + '/skrull.jpg' == init_mocked.cache_poster
+    assert fetch_data.MOVIE_PLIST_CACHE + '/skrull.jpg' == init_mocked.cache_poster
 
 
 def test_synopsis_exists():
@@ -70,28 +61,30 @@ def test_synopsis_exists():
 
 def test_choice_unseen():
     """
-    A record exists and it goes to an unseen movie dict
+    A record exists in dicts and it goes to an unseen movie dict
+    It is a kind of integration test
     """
     title = 'Shawshank Redemption 1994'
-    pimdbdata.MOVIE_UNSEEN[title] = ('root/',)
+    fetch_data.MOVIE_UNSEEN[title] = ('root/',)
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     html_path = os.path.join(base_dir, 'tests/Shawshank_Redemption-1994.html')
     ParseImdbData('file://' + html_path, title)
-    assert 'Directed by Frank Darabont' in pimdbdata.MOVIE_UNSEEN[title][1]
-    del pimdbdata.MOVIE_UNSEEN[title]
+    assert 'Directed by Frank Darabont' in fetch_data.MOVIE_UNSEEN[title][1]
+    del fetch_data.MOVIE_UNSEEN[title]
 
 
 def test_choice_seen():
     """
-    A record exists and it goes to a seen movie dict
+    A record exists in dicts and it goes to a seen movie dict
+    It is a kind of integration test
     """
     title = 'Shawshank Redemption 1994'
-    pimdbdata.MOVIE_SEEN[title] = ('root/',)
+    fetch_data.MOVIE_SEEN[title] = ('root/',)
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     html_path = os.path.join(base_dir, 'tests/Shawshank_Redemption-1994.html')
     ParseImdbData('file://' + html_path, title)
-    assert 'Directed by Frank Darabont' in pimdbdata.MOVIE_SEEN[title][1]
-    del pimdbdata.MOVIE_SEEN[title]
+    assert 'Directed by Frank Darabont' in fetch_data.MOVIE_SEEN[title][1]
+    del fetch_data.MOVIE_SEEN[title]
 
 
 @pytest.fixture
@@ -127,66 +120,3 @@ def test_choice_no_made(run_init):
     """
 
     assert run_init.title not in pimdbdata.MOVIE_UNSEEN
-
-
-# FetchImdbData tests
-@pytest.fixture
-def run_fetch(mocker):
-    mocker.patch.object(FetchImdbData, '_poster_file',
-                        return_value=b'tests/Shawshank_Redemption_1994.png')
-    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    html_path = os.path.join(base_dir, 'tests/Shawshank_Redemption-1994.html')
-    title = 'Shawshank Redemption 1994'
-    cache_poster = 'cache_poster'
-    return FetchImdbData('file://' + html_path, title, cache_poster)
-
-
-def test_init_poster_url(run_fetch):
-    poster_url = 'https://m.media-amazon.com/images/'
-    poster_url += 'M/MV5BMDFkYTc0MGEtZmNhMC00ZDIzLWFm'
-    poster_url += 'NTEtODM1ZmRlYWMwMWFmXkEyXkFqcGdeQXVyMTMxODk2OTU'
-    poster_url += '@._V1_UX182_CR0,0,182,268_AL_.jpg'
-    assert poster_url == run_fetch._poster_url()
-
-
-@patch('movie_plist.data.pimdbdata.FetchImdbData')
-def test_add_synopsis_attr(add, mocker):
-    """
-    When synopsis does not exists call FetchImdbData
-    """
-    mocker.patch.object(ParseImdbData, 'synopsis_exists', return_value=False)
-    ParseImdbData('url', 'title')
-    assert add.call_count == 1
-
-
-@patch('movie_plist.data.pimdbdata.BeautifulSoup')
-def test_description_content(poster_png, mocker):
-    """
-    What happens when synopsis does not exists
-    """
-    mocker.patch.object(pimdbdata, 'QImage')
-    mocker.patch.object(FetchImdbData, '_poster_url')
-    mocker.patch.object(FetchImdbData, '_poster_file')
-    mocker.patch.object(ParseImdbData, 'synopsis_exists', return_value=False)
-    ParseImdbData('url', 'title')
-    assert poster_png.call_count == 1
-
-
-@patch('movie_plist.data.pimdbdata.QImage')
-def test_no_poster_steps(save_img, run_fetch, mocker):
-    """
-    A poster exists. Do nothing.
-    """
-    mocker.patch.object(os.path, 'isfile', return_value=True)
-    run_fetch._do_poster_png_file()
-    assert save_img.call_count == 0
-
-
-@patch('movie_plist.data.pimdbdata.QImage')
-def test_do_poster_steps(save_img, run_fetch, mocker):
-    """
-    There is no poster yet. Create one and save it
-    """
-    mocker.patch.object(os.path, 'isfile', return_value=False)
-    run_fetch._do_poster_png_file()
-    assert save_img.call_count == 1
