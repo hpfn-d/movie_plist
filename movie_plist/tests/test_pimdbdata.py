@@ -12,6 +12,7 @@ expected = [
     hasattr(pimdbdata, 'MOVIE_PLIST_CACHE'),
 
     # ParseOmdbData methods
+    hasattr(pimdbdata.ParseImdbData, 'run'),
     hasattr(pimdbdata.ParseImdbData, 'synopsis_exists'),
     hasattr(pimdbdata.ParseImdbData, 'make_poster_name'),
 
