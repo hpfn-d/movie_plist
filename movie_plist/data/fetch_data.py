@@ -88,13 +88,18 @@ class FetchImdbData:
 
 # helper funcs
 def add_synopsis(title, synopsis):
-    if title in MOVIE_UNSEEN:
-        dict_movie_choice(title, MOVIE_UNSEEN, synopsis)
-    elif title in MOVIE_SEEN:
-        dict_movie_choice(title, MOVIE_SEEN, synopsis)
+    d_movie = MOVIE_UNSEEN
 
+    if title in MOVIE_SEEN:
+        d_movie = MOVIE_SEEN
 
-def dict_movie_choice(title, d_movie, synopsis):
     movie_info = list(d_movie[title])
     movie_info.insert(1, synopsis)
     d_movie[title] = tuple(movie_info)
+
+    # dict_movie_choice(title, movie, synopsis)
+
+# def dict_movie_choice(title, d_movie, synopsis):
+#     movie_info = list(d_movie[title])
+#     movie_info.insert(1, synopsis)
+#     d_movie[title] = tuple(movie_info)
