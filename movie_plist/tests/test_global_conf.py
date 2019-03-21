@@ -5,7 +5,7 @@ import pytest
 from movie_plist.conf import global_conf
 
 params = [
-    hasattr(global_conf, 'home_user'),
+    hasattr(global_conf, 'HOME_USER'),
     hasattr(global_conf, 'MOVIE_PLIST_STUFF'),
     hasattr(global_conf, 'MOVIE_PLIST_CACHE'),
     hasattr(global_conf, 'CFG_FILE'),
@@ -28,10 +28,10 @@ def test_attrs(a):
 def mock_attrs():
     # SetUp
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    global_conf.home_user = os.path.join(base_dir, 'home')
+    global_conf.HOME_USER = os.path.join(base_dir, 'home')
 
-    global_conf.MOVIE_PLIST_STUFF = os.path.join(global_conf.home_user, '.config/movie_plist')
-    global_conf.MOVIE_PLIST_CACHE = os.path.join(global_conf.home_user, '.cache/movie_plist')
+    global_conf.MOVIE_PLIST_STUFF = os.path.join(global_conf.HOME_USER, '.config/movie_plist')
+    global_conf.MOVIE_PLIST_CACHE = os.path.join(global_conf.HOME_USER, '.cache/movie_plist')
     global_conf.CFG_FILE = os.path.join(global_conf.MOVIE_PLIST_STUFF, 'movie_plist.cfg')
 
     global_conf.SEEN_JSON_FILE = os.path.join(global_conf.MOVIE_PLIST_STUFF, 'seen_movies.json')
@@ -46,7 +46,7 @@ def mock_attrs():
 
     yield global_conf
     # TearDown
-    os.system('/bin/rm -fr ' + global_conf.home_user)
+    os.system('/bin/rm -fr ' + global_conf.HOME_USER)
 
 
 def test_movie_plist_conf_files(mock_attrs):

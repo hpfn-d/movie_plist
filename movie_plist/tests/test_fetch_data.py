@@ -13,7 +13,6 @@ expected = [
     hasattr(fetch_data, 'MOVIE_UNSEEN'),
     hasattr(fetch_data, 'MOVIE_PLIST_CACHE'),
     hasattr(fetch_data, 'add_synopsis'),
-    # hasattr(fetch_data, 'dict_movie_choice'),
 
     # FetchImdbData methods
     hasattr(fetch_data.FetchImdbData, 'fetch'),

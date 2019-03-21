@@ -86,7 +86,7 @@ class FetchImdbData:
         return None
 
 
-# helper funcs
+# helper func
 def add_synopsis(title, synopsis):
     d_movie = MOVIE_UNSEEN
 
@@ -96,10 +96,3 @@ def add_synopsis(title, synopsis):
     movie_info = list(d_movie[title])
     movie_info.insert(1, synopsis)
     d_movie[title] = tuple(movie_info)
-
-    # dict_movie_choice(title, movie, synopsis)
-
-# def dict_movie_choice(title, d_movie, synopsis):
-#     movie_info = list(d_movie[title])
-#     movie_info.insert(1, synopsis)
-#     d_movie[title] = tuple(movie_info)

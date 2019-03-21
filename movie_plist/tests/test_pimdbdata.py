@@ -61,32 +61,38 @@ def test_synopsis_exists(mocker):
     assert obj.cache_poster.endswith('movie_plist/tests/.cache/title.png')
 
 
-def test_choice_unseen():
+def test_choice_unseen(mocker):
     """
     A record exists in dicts and it goes to an unseen movie dict
     It is a kind of integration test
     """
+    mocker.patch.object(pimdbdata.FetchImdbData, '_poster_file',
+                        return_value=b'tests/Shawshank_Redemption_1994.png')
     title = 'Shawshank Redemption 1994'
     fetch_data.MOVIE_UNSEEN[title] = ('root/',)
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     html_path = os.path.join(base_dir, 'tests/Shawshank_Redemption-1994.html')
-    ParseImdbData('file://' + html_path, title)
+    obj = ParseImdbData('file://' + html_path, title)
     assert 'Directed by Frank Darabont' in fetch_data.MOVIE_UNSEEN[title][1]
+    assert obj.cache_poster.endswith('movie_plist/tests/.cache/Shawshank_Redemption_1994.png')
     del fetch_data.MOVIE_UNSEEN[title]
 
 
-def test_choice_seen():
+def test_choice_seen(mocker):
     """
     A record exists in dicts and it goes to a seen movie dict
     It is a kind of integration test
     """
+    mocker.patch.object(pimdbdata.FetchImdbData, '_poster_file',
+                        return_value=b'tests/Shawshank_Redemption_1994.png')
     title = 'Shawshank Redemption 1994'
     fetch_data.MOVIE_SEEN[title] = ('root/',)
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     html_path = os.path.join(base_dir, 'tests/Shawshank_Redemption-1994.html')
-    ParseImdbData('file://' + html_path, title)
+    obj = ParseImdbData('file://' + html_path, title)
     assert 'Directed by Frank Darabont' in fetch_data.MOVIE_SEEN[title][1]
     del fetch_data.MOVIE_SEEN[title]
+    assert obj.cache_poster.endswith('movie_plist/tests/.cache/Shawshank_Redemption_1994.png')
 
 
 @pytest.fixture

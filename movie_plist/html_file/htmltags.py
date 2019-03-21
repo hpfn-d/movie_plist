@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import textwrap
 
 from movie_plist.data.pimdbdata import ParseImdbData

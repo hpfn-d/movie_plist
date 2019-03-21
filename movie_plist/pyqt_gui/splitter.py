@@ -1,6 +1,3 @@
-#!/usr/bin/python3
-# -*- coding: utf-8 -*-
-
 """
 most from zetcode tutorial
 """
@@ -19,7 +16,7 @@ from movie_plist.pyqt_gui.right_click_menu import RightClickMenu
 
 
 class TwoLines(QWidget):
-    def __init__(self):  # , m_seen, m_unseen):
+    def __init__(self):
         super().__init__()
         self.top = QListWidget()
         if MOVIE_UNSEEN:
