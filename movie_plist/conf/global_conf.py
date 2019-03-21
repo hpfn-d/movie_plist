@@ -2,10 +2,10 @@ import json
 import os
 
 # user
-home_user = os.environ['HOME']
+HOME_USER = os.environ['HOME']
 # first, main path
-MOVIE_PLIST_CACHE = os.path.join(home_user, '.cache/movie_plist')
-MOVIE_PLIST_STUFF = os.path.join(home_user, '.config/movie_plist')
+MOVIE_PLIST_CACHE = os.path.join(HOME_USER, '.cache/movie_plist')
+MOVIE_PLIST_STUFF = os.path.join(HOME_USER, '.config/movie_plist')
 CFG_FILE = os.path.join(MOVIE_PLIST_STUFF, 'movie_plist.cfg')
 SEEN_JSON_FILE = os.path.join(MOVIE_PLIST_STUFF, 'seen_movies.json')
 UNSEEN_JSON_FILE = os.path.join(MOVIE_PLIST_STUFF, 'unseen_movies.json')

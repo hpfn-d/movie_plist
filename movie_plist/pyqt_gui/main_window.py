@@ -1,6 +1,3 @@
-#!/usr/bin/python3
-# -*- coding: utf-8 -*-
-
 """
 from zetcode tutorial
 """
@@ -14,7 +11,7 @@ from . import splitter
 
 
 class Window(QMainWindow):
-    def __init__(self):  # , m_seen, m_unseen):  # m_seen, m_unseen):
+    def __init__(self):
         super().__init__()
         self.two_lines = splitter.TwoLines()
         self.timer = QTimer()
@@ -40,12 +37,9 @@ class Window(QMainWindow):
         seen_action.triggered.connect(self.seenmovies)
 
         # status bar
-        # self.statusBar().showMessage('Unseen: ' + count_unseen + ' | Seen: ' + count_seen)
-        # self.update_statusbar()
-        # self.timer = QTimer()
         self.timer.timeout.connect(self.update_statusbar)
         # check every second
-        self.timer.start(1000*1)
+        self.timer.start(1000 * 1)
 
         toolbar = self.addToolBar('Exit')
         toolbar.addAction(exit_action)
@@ -62,7 +56,6 @@ class Window(QMainWindow):
         self.two_lines.current_dict = MOVIE_UNSEEN
         self.two_lines.top.addItems(MOVIE_UNSEEN.keys())
         self.two_lines.top.setCurrentRow(0)
-        # self.update_statusbar()
 
     def seenmovies(self):
         # botão 'seen'
@@ -71,10 +64,8 @@ class Window(QMainWindow):
             self.two_lines.current_dict = MOVIE_SEEN
             self.two_lines.top.addItems(MOVIE_SEEN.keys())
             self.two_lines.top.setCurrentRow(0)
-            # self.update_statusbar()
 
     def update_statusbar(self):
-        # self.statusBar().clearMessage()
         self.statusBar().showMessage(Window.unseen_status() + Window.seen_status())
 
     @staticmethod

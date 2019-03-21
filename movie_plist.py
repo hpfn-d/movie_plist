@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-# -*-coding-utf8-*
+
 import sys
 
 from PyQt5.QtWidgets import QApplication
