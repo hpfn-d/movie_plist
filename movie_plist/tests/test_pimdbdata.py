@@ -97,6 +97,8 @@ def run_init():
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     html_path = os.path.join(base_dir, 'tests/Shawshank_Redemption-1994.html')
     title = 'Shawshank Redemption 1994'
+    fetch_data.MOVIE_UNSEEN[title] = ('root/',)
+
     return ParseImdbData('file://' + html_path, title)
 
 
