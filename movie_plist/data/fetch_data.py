@@ -88,10 +88,10 @@ class FetchImdbData:
 
 # helper func
 def add_synopsis(title, synopsis):
-    d_movie = MOVIE_UNSEEN
+    d_movie = MOVIE_SEEN
 
-    if title in MOVIE_SEEN:
-        d_movie = MOVIE_SEEN
+    if MOVIE_UNSEEN.get(title):
+        d_movie = MOVIE_UNSEEN
 
     movie_info = list(d_movie[title])
     movie_info.insert(1, synopsis)
