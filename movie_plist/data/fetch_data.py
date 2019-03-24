@@ -61,7 +61,7 @@ class FetchImdbData:
     def _poster_file(self):
         try:
             return urlopen(self._poster_url(), timeout=3).read()
-        except (URLError, timeout, TypeError) as e:
+        except (AttributeError, URLError, timeout, TypeError) as e:
             print(e)
             print("Poster File method error.")
 
@@ -70,7 +70,13 @@ class FetchImdbData:
 
     def _poster_url(self):
         find_url = re.search(r'\bhttp\S+jpg\b', str(self.bs4_poster))
-        return find_url.group(0)
+        try:
+            return find_url.group(0)
+        except AttributeError as e:
+            print(e)
+            print("Maybe the (poster) url does not exists")
+
+        return None
 
     def _get_html(self):
         """
