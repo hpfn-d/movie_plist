@@ -2,19 +2,19 @@ import os
 
 import pytest
 
-from movie_plist.data import fetch_data, pimdbdata
-from movie_plist.data.pimdbdata import ParseImdbData
+from movie_plist.data import data_manager, fetch_data
+from movie_plist.data.data_manager import ImdbDataManager
 
 expected = [
 
-    hasattr(pimdbdata, 'MOVIE_SEEN'),
-    hasattr(pimdbdata, 'MOVIE_UNSEEN'),
-    hasattr(pimdbdata, 'MOVIE_PLIST_CACHE'),
+    hasattr(data_manager, 'MOVIE_SEEN'),
+    hasattr(data_manager, 'MOVIE_UNSEEN'),
+    hasattr(data_manager, 'MOVIE_PLIST_CACHE'),
 
     # ParseOmdbData methods
-    hasattr(pimdbdata.ParseImdbData, 'run'),
-    hasattr(pimdbdata.ParseImdbData, 'synopsis_exists'),
-    hasattr(pimdbdata.ParseImdbData, 'make_poster_name'),
+    hasattr(data_manager.ImdbDataManager, 'run'),
+    hasattr(data_manager.ImdbDataManager, 'synopsis_exists'),
+    hasattr(data_manager.ImdbDataManager, 'make_poster_name'),
 
 ]
 
@@ -30,11 +30,11 @@ def init_mocked(mocker):
     For whatever reason BS$ fails
     """
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    pimdbdata.MOVIE_PLIST_CACHE = os.path.join(base_dir, 'home/.cache/movie_plist')
+    data_manager.MOVIE_PLIST_CACHE = os.path.join(base_dir, 'home/.cache/movie_plist')
     mocker.patch.object(fetch_data, 'urlopen')
     mocker.patch.object(fetch_data, 'BeautifulSoup', return_value=None)
 
-    return ParseImdbData('url', 'title 1999')
+    return ImdbDataManager('url', 'title 1999')
 
 
 def test_synopsis(init_mocked):
@@ -49,14 +49,14 @@ def test_synopsis_exists(mocker):
     """
     Imdb data exists. Do nothing.
     """
-    mocker.patch.object(pimdbdata.os.path, 'isfile', return_value=True)
+    mocker.patch.object(data_manager.os.path, 'isfile', return_value=True)
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    pimdbdata.MOVIE_PLIST_CACHE = os.path.join(base_dir, 'tests/.cache')
-    pimdbdata.MOVIE_UNSEEN = dict(
+    data_manager.MOVIE_PLIST_CACHE = os.path.join(base_dir, 'tests/.cache')
+    data_manager.MOVIE_UNSEEN = dict(
         title=('/root', 'synopsis', 'any_path')
     )
 
-    obj = ParseImdbData('url', 'title')
+    obj = ImdbDataManager('url', 'title')
     assert obj.synopsis == 'synopsis'
     assert obj.cache_poster.endswith('movie_plist/tests/.cache/title.png')
 
@@ -66,13 +66,13 @@ def test_choice_unseen(mocker):
     A record exists in dicts and it goes to an unseen movie dict
     It is a kind of integration test
     """
-    mocker.patch.object(pimdbdata.FetchImdbData, '_poster_file',
+    mocker.patch.object(data_manager.FetchImdbData, '_poster_file',
                         return_value=b'tests/Shawshank_Redemption_1994.png')
     title = 'Shawshank Redemption 1994'
     fetch_data.MOVIE_UNSEEN[title] = ('root/',)
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     html_path = os.path.join(base_dir, 'tests/Shawshank_Redemption-1994.html')
-    obj = ParseImdbData('file://' + html_path, title)
+    obj = ImdbDataManager('file://' + html_path, title)
     assert 'Directed by Frank Darabont' in fetch_data.MOVIE_UNSEEN[title][1]
     assert obj.cache_poster.endswith('movie_plist/tests/.cache/Shawshank_Redemption_1994.png')
     del fetch_data.MOVIE_UNSEEN[title]
@@ -83,13 +83,13 @@ def test_choice_seen(mocker):
     A record exists in dicts and it goes to a seen movie dict
     It is a kind of integration test
     """
-    mocker.patch.object(pimdbdata.FetchImdbData, '_poster_file',
+    mocker.patch.object(data_manager.FetchImdbData, '_poster_file',
                         return_value=b'tests/Shawshank_Redemption_1994.png')
     title = 'Shawshank Redemption 1994'
     fetch_data.MOVIE_SEEN[title] = ('root/',)
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     html_path = os.path.join(base_dir, 'tests/Shawshank_Redemption-1994.html')
-    obj = ParseImdbData('file://' + html_path, title)
+    obj = ImdbDataManager('file://' + html_path, title)
     assert 'Directed by Frank Darabont' in fetch_data.MOVIE_SEEN[title][1]
     del fetch_data.MOVIE_SEEN[title]
     assert obj.cache_poster.endswith('movie_plist/tests/.cache/Shawshank_Redemption_1994.png')
@@ -105,7 +105,7 @@ def run_init():
     title = 'Shawshank Redemption 1994'
     fetch_data.MOVIE_UNSEEN[title] = ('root/',)
 
-    return ParseImdbData('file://' + html_path, title)
+    return ImdbDataManager('file://' + html_path, title)
 
 
 def test_init_synopsys(run_init):
@@ -129,4 +129,4 @@ def test_choice_no_made(run_init):
     the method works for old records
     """
 
-    assert run_init.title not in pimdbdata.MOVIE_UNSEEN
+    assert run_init.title not in data_manager.MOVIE_UNSEEN
