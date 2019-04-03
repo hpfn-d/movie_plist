@@ -3,7 +3,7 @@ import os
 import pytest
 
 from movie_plist.conf.global_conf import MOVIE_PLIST_CACHE
-from movie_plist.data import pimdbdata
+from movie_plist.data import data_manager
 from movie_plist.html_file import htmltags
 from movie_plist.html_file.htmltags import HtmlTags
 
@@ -23,7 +23,7 @@ def test_htmltags_class(mocker):
 # Kind of integration tests with pimdbdata
 @pytest.fixture
 def build_obj(mocker):
-    mocker.patch.object(pimdbdata.os.path, 'isfile', return_value=False)
+    mocker.patch.object(data_manager.os.path, 'isfile', return_value=False)
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     html_path = os.path.join(base_dir, 'tests/Shawshank_Redemption-1994.html')
     MOVIE_PLIST_CACHE = os.path.join(base_dir, 'tests/.cache')  # noqa F841
@@ -33,7 +33,7 @@ def build_obj(mocker):
 
 def test_htlmtags_attrs(build_obj):
     attrs = build_obj
-    assert hasattr(htmltags, 'ParseImdbData')
+    assert hasattr(htmltags, 'ImdbDataManager')
     assert hasattr(attrs, '_url')
     assert hasattr(attrs, 'context')
     assert hasattr(attrs, '_synopsis')

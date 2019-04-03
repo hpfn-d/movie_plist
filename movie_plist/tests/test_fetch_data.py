@@ -2,9 +2,9 @@ from unittest.mock import patch
 
 import pytest
 
-from movie_plist.data import fetch_data, pimdbdata
+from movie_plist.data import data_manager, fetch_data
+from movie_plist.data.data_manager import ImdbDataManager, os
 from movie_plist.data.fetch_data import FetchImdbData
-from movie_plist.data.pimdbdata import ParseImdbData, os
 
 expected = [
 
@@ -57,14 +57,14 @@ def test_synopsys(run_fetch):
     assert synopsys == run_fetch.synopsis
 
 
-@patch('movie_plist.data.pimdbdata.FetchImdbData')
+@patch('movie_plist.data.data_manager.FetchImdbData')
 def test_add_synopsis_attr(add, mocker):
     """
     When imdb data does not exists call FetchImdbData
     It is a kind of integration test
     """
-    mocker.patch.object(pimdbdata.os.path, 'isfile', return_value=False)
-    ParseImdbData('url', 'title')
+    mocker.patch.object(data_manager.os.path, 'isfile', return_value=False)
+    ImdbDataManager('url', 'title')
     assert add.call_count == 1
 
 

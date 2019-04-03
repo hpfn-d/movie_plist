@@ -2,11 +2,12 @@ import os
 
 from movie_plist.conf.global_conf import MOVIE_PLIST_CACHE
 
-from .fetch_data import FetchImdbData
-from .pyscan import MOVIE_SEEN, MOVIE_UNSEEN
+from .fetch_data import MOVIE_SEEN, MOVIE_UNSEEN, FetchImdbData
+
+# from .pyscan import MOVIE_SEEN, MOVIE_UNSEEN
 
 
-class ParseImdbData:
+class ImdbDataManager:
     def __init__(self, url, title):
         """
 
