@@ -142,10 +142,8 @@ setup(
     ],
     # requests
     install_requires=[
-        'cython>=0.29',
         'beautifulsoup4>=4.6.0',
         'PyQt5>=5.10.1',
-        'urllib3>=1.22'
     ],
     zip_safe=False,
     #    ext_modules=extensions
