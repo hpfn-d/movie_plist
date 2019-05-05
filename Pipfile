@@ -10,6 +10,8 @@ flake8 = "*"
 isort = "*"
 pytest-cov = "*"
 tox = "*"
+pyqt5-stubs = "*"
+mypy = "*"
 
 [packages]
 pyqt5 = "*"

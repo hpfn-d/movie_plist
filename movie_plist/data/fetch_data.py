@@ -1,5 +1,5 @@
 import re
-from _socket import timeout
+from socket import timeout
 from urllib.error import URLError
 from urllib.request import urlopen
 
@@ -12,7 +12,7 @@ from .pyscan import MOVIE_SEEN, MOVIE_UNSEEN
 
 
 class FetchImdbData:
-    def __init__(self, url, title, cache_poster):
+    def __init__(self, url: str, title: str, cache_poster: str):
         self._url = url
         self.title = title
         self.bs4_poster = ''
@@ -93,7 +93,7 @@ class FetchImdbData:
 
 
 # helper func
-def add_synopsis(title, synopsis):
+def add_synopsis(title: str, synopsis: str):
     d_movie = MOVIE_UNSEEN if MOVIE_UNSEEN.get(title) else MOVIE_SEEN
 
     movie_info = list(d_movie[title])
