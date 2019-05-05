@@ -2,11 +2,12 @@ import os
 import re
 import time
 from sys import exit
+from typing import Generator, List, Tuple
 
 from movie_plist.conf.global_conf import CFG_FILE, MOVIE_SEEN, MOVIE_UNSEEN
 
 
-def create_dicts():
+def create_dicts() -> None:
     """
     # get seen movies from json file
     # get unseen movies from on json file
@@ -17,14 +18,16 @@ def create_dicts():
 
     start = time.time()
 
-    movie_unseen_to_add = {dir_name: i for dir_name, i in _new_data()}
+    movie_unseen_to_add = {dir_name: (url, path) for dir_name, url, path in _new_data()}
     MOVIE_UNSEEN.update(movie_unseen_to_add)
 
     end = time.time()
     print(end - start)
 
+    return None
 
-def _new_data():
+
+def _new_data() -> Generator[Tuple[str, str, str], None, None]:
     """ return title_year, imdb_url and path to movie """
 
     for root, file_n in _new_desktop_f():
@@ -32,18 +35,22 @@ def _new_data():
         imdb_url = _open_right_file(file_with_url)
         title_year = mk_title_year(root)
 
-        yield title_year, (imdb_url, root)
+        yield (title_year, imdb_url, root)
+
+    return None
 
 
-def _new_desktop_f():
+def _new_desktop_f() -> Generator[Tuple[str, str], None, None]:
     """ search for a .desktop file in a directory """
-    return ((root, file_n)
-            for root, filename in _unknow_dirs()
-            for file_n in filename
-            if file_n.endswith('.desktop'))
+    for root, filename in _unknow_dirs():
+        for file_n in filename:
+            if file_n.endswith('.desktop'):
+                yield (root, file_n)
+
+    return None
 
 
-def _unknow_dirs():
+def _unknow_dirs() -> Generator[Tuple[str, List[str]], None, None]:
     """ root (path) that are not in json files """
 
     _scan_dir = get_dir_path()
@@ -56,23 +63,27 @@ def _unknow_dirs():
         if not title_year:
             yield (root, filename)
 
+    return None
 
-def _open_right_file(file_with_url):
+
+def _open_right_file(file_with_url: str) -> str:
     """ open the right file and get the url"""
     # IO error out of try/except
-    with open(file_with_url, 'r') as check_content:
-        file_lines = check_content.readlines()
-
     try:
-        line_with_url = re.search(r"(URL|url)=https?://.*", ' '.join(file_lines))
-        url = line_with_url.group(0)[4:]
-    except AttributeError:
-        raise Exception('There is no url in %s' % file_with_url)
-    else:
-        return url
+        with open(file_with_url, 'r') as check_content:
+            file_lines = check_content.readlines()
+    except IOError:
+        raise Exception('Error while opening %s'.format(file_with_url))
+
+    line_with_url = re.search(r"(URL|url)=https?://.*", ' '.join(file_lines))
+
+    if line_with_url:
+        return line_with_url.group(0)[4:]
+
+    raise Exception('There is no url in %s' % file_with_url)
 
 
-def mk_title_year(root_path):
+def mk_title_year(root_path: str) -> str:
     return root_path.rpartition('/')[-1]
 
 
@@ -80,7 +91,7 @@ class InvalidPath(Exception):
     pass
 
 
-def read_path():
+def read_path() -> str:
     with open(CFG_FILE, 'r') as movie_plist_cfg:
         cfg_path = movie_plist_cfg.readline()
 
@@ -90,7 +101,7 @@ def read_path():
     return cfg_path
 
 
-def write_path(cfg_path):
+def write_path(cfg_path: str) -> str:
     if not os.path.isdir(cfg_path):
         raise InvalidPath('Invalid path. Please try again.')
 
@@ -100,7 +111,7 @@ def write_path(cfg_path):
     return cfg_path
 
 
-def get_dir_path():
+def get_dir_path() -> str:
     if os.path.isfile(CFG_FILE):
         path_dir_scan = read_path()
     else:
@@ -110,7 +121,7 @@ def get_dir_path():
     return path_dir_scan
 
 
-def scan_dir_has_movies(scan_dir):
+def scan_dir_has_movies(scan_dir: str):
     # tem que fazer uma checagem melhor
     for _, _, filename in os.walk(scan_dir):
         for file in filename:

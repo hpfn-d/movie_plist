@@ -6,3 +6,4 @@ __pycache__
 .coverage
 .tox/
 movie_plist.egg-info/
+.mypy_cache/
