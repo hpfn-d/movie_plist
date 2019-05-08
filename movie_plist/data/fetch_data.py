@@ -1,7 +1,8 @@
 import re
 from socket import timeout
+from typing import Union
 from urllib.error import URLError
-from urllib.request import urlopen
+from urllib.request import Request, urlopen
 
 from bs4 import BeautifulSoup
 from PyQt5.QtGui import QImage  # pylint: disable-msg=E0611
@@ -24,7 +25,7 @@ class FetchImdbData:
 
         self.fetch(cache_poster)
 
-    def fetch(self, cache_poster):
+    def fetch(self, cache_poster: str) -> None:
 
         try:
             soup = BeautifulSoup(self._get_html(), 'html.parser')
@@ -45,40 +46,38 @@ class FetchImdbData:
             self.cache_poster = cache_poster
             self._do_poster_png_file()
 
-    def _do_poster_png_file(self):
+    def _do_poster_png_file(self) -> None:
         """
 
         """
-        try:
+        poster_to_save = self._poster_file()
+        if poster_to_save:
             img = QImage()  # (8,10,4)
-            img.loadFromData(self._poster_file())
+            img.loadFromData(poster_to_save)
             img.save(self.cache_poster)
-        except TypeError:
-            print('QImage - Unexpected type str. Please try again.')
-        else:
             add_synopsis(self.title, self.synopsis)
+        else:
+            print('QImage - Unexpected type for a poster. Please try again.')
 
-    def _poster_file(self):
-        try:
-            return urlopen(self._poster_url(), timeout=3).read()
-        except (AttributeError, URLError, timeout, TypeError) as e:
-            print(e)
-            print("Poster File method error.")
+    def _poster_file(self) -> Union[bytes]:
+        poster_file = urlopen(self._poster_url(), timeout=3).read()
 
-        # this is not the type expected by QImage.loadFromData
-        return ''
-
-    def _poster_url(self):
-        find_url = re.search(r'\bhttp\S+jpg\b', str(self.bs4_poster))
-        try:
-            return find_url.group(0)
-        except AttributeError as e:
-            print(e)
-            print("Maybe the (poster) url does not exists")
+        if isinstance(poster_file, bytes):
+            return poster_file
 
         return None
 
-    def _get_html(self):
+    def _poster_url(self) -> Union[str, Request]:
+        find_url = re.search(r'\bhttp\S+jpg\b', str(self.bs4_poster))
+        if find_url:
+            return find_url.group(0)
+
+        print(f'Did not find a url for {self.title}')
+        print("Maybe the (poster) url does not exists in the .html file")
+
+        return ''
+
+    def _get_html(self) -> Union[bytes, str]:
         """
 
         """
@@ -89,11 +88,11 @@ class FetchImdbData:
             print(e)
             print(text)
 
-        return None
+        return ''
 
 
 # helper func
-def add_synopsis(title: str, synopsis: str):
+def add_synopsis(title: str, synopsis: str) -> None:
     d_movie = MOVIE_UNSEEN if MOVIE_UNSEEN.get(title) else MOVIE_SEEN
 
     movie_info = list(d_movie[title])
