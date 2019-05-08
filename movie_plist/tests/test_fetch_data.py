@@ -68,21 +68,37 @@ def test_add_synopsis_attr(add, mocker):
     assert add.call_count == 1
 
 
-# @patch('movie_plist.data.fetch_data.dict_movie_choice')
-@patch('movie_plist.data.fetch_data.add_synopsis')
-@patch('movie_plist.data.fetch_data.FetchImdbData._poster_url')
 @patch('movie_plist.data.fetch_data.QImage')
+@patch('movie_plist.data.fetch_data.urlopen')
+@patch('movie_plist.data.fetch_data.FetchImdbData._get_html')
 @patch('movie_plist.data.fetch_data.BeautifulSoup')
-def test_description_content(bs4, img, url, add):
+def test_description_content(bs4, html, fetch, img):
     """
     What happens when imdb data does not exists
     """
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    html_path = os.path.join(base_dir, 'tests/Shawshank_Redemption-1994.html')
+    FetchImdbData('file://' + html_path, 'title', 'cache_poster')
+
+    assert bs4.call_count == 1
+    assert html.call_count == 1
+    assert fetch.call_count == 1
+    assert img.call_count == 0
+
+
+@patch('movie_plist.data.fetch_data.QImage')
+@patch('movie_plist.data.fetch_data.urlopen')
+@patch('movie_plist.data.fetch_data.FetchImdbData._get_html')
+@patch('movie_plist.data.fetch_data.BeautifulSoup')
+def test_url(bs4, html, fetch, img):
+    """
+    What happens bad url
+    """
     FetchImdbData('url', 'title', 'cache_poster')
     assert bs4.call_count == 1
-    assert img.call_count == 1
-    assert url.call_count == 1
-    assert add.call_count == 1
-    # assert choice.call_count == 1
+    assert html.call_count == 1
+    assert fetch.call_count == 1
+    assert img.call_count == 0
 
 
 @patch('movie_plist.data.fetch_data.QImage.save')

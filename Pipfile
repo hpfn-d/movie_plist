@@ -12,10 +12,13 @@ pytest-cov = "*"
 tox = "*"
 pyqt5-stubs = "*"
 mypy = "*"
+flake8-bugbear = "*"
+flake8-pyi = "*"
+wily = "*"
 
 [packages]
-pyqt5 = "*"
 beautifulsoup4 = "*"
+pyqt5 = "==5.12.1"
 
 [scripts]
 cov_all = "pytest --cov=movie_plist"
