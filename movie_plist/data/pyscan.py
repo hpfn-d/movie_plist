@@ -1,9 +1,9 @@
 import os
 import re
+import sys
 import time
 from pathlib import Path
-from sys import exit
-from typing import Generator, List, Tuple
+from typing import Generator, Tuple
 
 from movie_plist.conf.global_conf import CFG_FILE, MOVIE_SEEN, MOVIE_UNSEEN
 
@@ -29,64 +29,54 @@ def create_dicts() -> None:
 
 
 def _new_data() -> Generator[Tuple[str, str, str], None, None]:
-    """ return title_year, imdb_url and path to movie """
-
-    for root, file_n in _new_desktop_f():
-        file_with_url = os.path.join(root, file_n)
-        imdb_url = _open_right_file(file_with_url)
-        title_year = mk_title_year(root)
-
-        yield (title_year, imdb_url, root)
-
-    return None
-
-
-def _new_desktop_f() -> Generator[Tuple[str, str], None, None]:
-    """ search for a .desktop file in a directory
-
-    use .r?glob() here
-
     """
-    for root, filename in _unknow_dirs():
-        for file_n in filename:
-            if file_n.endswith('.desktop'):
-                yield (root, file_n)
+    return title_year, imdb_url and path to movie
+    Path obj is converted to str
+    """
+    for root in _new_desktop_f():
+        imdb_url = _open_right_file(root)
+        path = str(root.parent)
+        title_year = mk_title_year(path)
+
+        yield (title_year, imdb_url, path)
 
     return None
 
 
-def _unknow_dirs() -> Generator[Tuple[str, List[str]], None, None]:
+def _new_desktop_f() -> Generator[Path, None, None]:
+    """ search for a .desktop file in a directory """
+    for d in _unknow_dirs():
+        for f in d.iterdir():
+            if str(f).endswith(".desktop"):
+                yield f
+
+    return None
+
+
+def _unknow_dirs() -> Generator[Path, None, None]:
     """ root (path) that are not in json files
 
-    use pathlib.Path to find the last modified file - new dir/movie
-    check this:
-
-    directory = pathlib.Path('~/Videos')
-    time, file_path = max((f.stat().st_mtime, f) for f in directory.iterdir())
-    print(datetime.fromtimestamp(time), file_path)
-
-    then use .r?glob to find .desktop file - in _new_desktop_f func
+    # see this later - stat info
+    directory = Path(_scan_dir)
+    ((f.stat().st_mtime, f) for f in directory.iterdir())
     """
     _scan_dir = get_dir_path()
     scan_dir_has_movies(_scan_dir)
 
     _json_movies = {**MOVIE_SEEN, **MOVIE_UNSEEN}
 
-    for root, _, filename in os.walk(_scan_dir):
-        title_year = _json_movies.get(mk_title_year(root), 0)
+    for root, _, _ in os.walk(_scan_dir):
+        title_year = mk_title_year(root)
+        title_year = _json_movies.get(title_year, 0)
         if not title_year:
-            yield (root, filename)
+            yield Path(root)
 
     return None
 
 
-def _open_right_file(file_with_url: str) -> str:
-    """
-    open the right file and get the url
-    already checked as .desktop file by _new_desktop_f func
-    """
-    content = Path(file_with_url)
-    file_lines = content.read_text()
+def _open_right_file(file_with_url: Path) -> str:
+    """ receives a Path obj and read the content of the file """
+    file_lines = file_with_url.read_text()
 
     pat = r"(URL|url)=https?://.*"
     line_with_url = re.search(pat, ''.join(file_lines))
@@ -159,4 +149,4 @@ def scan_dir_has_movies(scan_dir: str):
     msg.setStandardButtons(QMessageBox.Ok)
     msg.exec_()
 
-    exit('1')
+    sys.exit('1')
