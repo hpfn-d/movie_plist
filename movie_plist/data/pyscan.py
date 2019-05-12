@@ -1,6 +1,7 @@
 import os
 import re
 import time
+from pathlib import Path
 from sys import exit
 from typing import Generator, List, Tuple
 
@@ -41,7 +42,11 @@ def _new_data() -> Generator[Tuple[str, str, str], None, None]:
 
 
 def _new_desktop_f() -> Generator[Tuple[str, str], None, None]:
-    """ search for a .desktop file in a directory """
+    """ search for a .desktop file in a directory
+
+    use .r?glob() here
+
+    """
     for root, filename in _unknow_dirs():
         for file_n in filename:
             if file_n.endswith('.desktop'):
@@ -51,8 +56,17 @@ def _new_desktop_f() -> Generator[Tuple[str, str], None, None]:
 
 
 def _unknow_dirs() -> Generator[Tuple[str, List[str]], None, None]:
-    """ root (path) that are not in json files """
+    """ root (path) that are not in json files
 
+    use pathlib.Path to find the last modified file - new dir/movie
+    check this:
+
+    directory = pathlib.Path('~/Videos')
+    time, file_path = max((f.stat().st_mtime, f) for f in directory.iterdir())
+    print(datetime.fromtimestamp(time), file_path)
+
+    then use .r?glob to find .desktop file - in _new_desktop_f func
+    """
     _scan_dir = get_dir_path()
     scan_dir_has_movies(_scan_dir)
 
@@ -67,20 +81,20 @@ def _unknow_dirs() -> Generator[Tuple[str, List[str]], None, None]:
 
 
 def _open_right_file(file_with_url: str) -> str:
-    """ open the right file and get the url"""
-    # IO error out of try/except
-    try:
-        with open(file_with_url, 'r') as check_content:
-            file_lines = check_content.readlines()
-    except IOError:
-        raise Exception('Error while opening %s'.format(file_with_url))
+    """
+    open the right file and get the url
+    already checked as .desktop file by _new_desktop_f func
+    """
+    content = Path(file_with_url)
+    file_lines = content.read_text()
 
-    line_with_url = re.search(r"(URL|url)=https?://.*", ' '.join(file_lines))
+    pat = r"(URL|url)=https?://.*"
+    line_with_url = re.search(pat, ''.join(file_lines))
 
     if line_with_url:
         return line_with_url.group(0)[4:]
 
-    raise Exception('There is no url in %s' % file_with_url)
+    raise Exception(f'Please check {file_with_url} file. Path and content')
 
 
 def mk_title_year(root_path: str) -> str:
@@ -92,23 +106,23 @@ class InvalidPath(Exception):
 
 
 def read_path() -> str:
-    with open(CFG_FILE, 'r') as movie_plist_cfg:
-        cfg_path = movie_plist_cfg.readline()
+    content = Path(CFG_FILE)
+    cfg_file_path = content.read_text()
 
-    if not os.path.isdir(cfg_path):
+    if not os.path.isdir(cfg_file_path):
         raise InvalidPath('Invalid path in movie_plist.cfg file.')
 
-    return cfg_path
+    return cfg_file_path
 
 
-def write_path(cfg_path: str) -> str:
-    if not os.path.isdir(cfg_path):
+def write_path(cfg_file_path: str) -> str:
+    if not os.path.isdir(cfg_file_path):
         raise InvalidPath('Invalid path. Please try again.')
 
-    with open(CFG_FILE, 'w') as cfg_write:
-        cfg_write.write(cfg_path)
+    w_path = Path(CFG_FILE)
+    w_path.write_text(cfg_file_path)
 
-    return cfg_path
+    return cfg_file_path
 
 
 def get_dir_path() -> str:
