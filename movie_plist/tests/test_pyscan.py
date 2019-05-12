@@ -9,7 +9,7 @@ expected = [
     hasattr(pyscan, 'os'),
     hasattr(pyscan, 're'),
     hasattr(pyscan, 'time'),
-    hasattr(pyscan, 'exit'),
+    hasattr(pyscan, 'sys'),
     hasattr(pyscan, 'MOVIE_SEEN'),
     hasattr(pyscan, 'MOVIE_UNSEEN'),
     hasattr(pyscan, 'create_dicts'),
@@ -52,7 +52,7 @@ def test_all_key(test_all):
 
 def test_all_url(test_all):
     url, _ = list(pyscan.MOVIE_UNSEEN.values())[0]
-    assert 'https://www.imdb.com/title/tt0111161/' in url
+    assert 'https://www.imdb.com/title/tt0111161/' == url
 
 
 def test_all_path_to(test_all):
@@ -60,7 +60,7 @@ def test_all_path_to(test_all):
 
     return_path = 'movie_plist/tests/'
     return_path += 'videos_test/Shawshank Redemption, the 1994'
-    assert return_path in path_to
+    assert return_path == path_to
 
 
 def test_all_movie_seen_len(test_all):
@@ -118,7 +118,7 @@ def test_fail_read_path():
         pyscan.read_path()
 
 
-@patch('movie_plist.data.pyscan.exit')
+@patch('movie_plist.data.pyscan.sys.exit')
 @patch('PyQt5.QtWidgets.QApplication')
 @patch('PyQt5.QtWidgets.QMessageBox')
 def test_fail_scan(message, app, exit):
