@@ -47,9 +47,10 @@ def _new_data() -> Generator[Tuple[str, str, str], None, None]:
 def _new_desktop_f() -> Generator[Path, None, None]:
     """ search for a .desktop file in a directory """
     for d in _unknow_dirs():
-        for f in d.iterdir():
-            if str(f).endswith(".desktop"):
-                yield f
+        teste = list(d.glob("*.desktop"))
+        if teste:
+            yield teste[0]
+            assert len(teste) == 1
 
     return None
 
@@ -67,8 +68,7 @@ def _unknow_dirs() -> Generator[Path, None, None]:
 
     for root, _, _ in os.walk(_scan_dir):
         title_year = mk_title_year(root)
-        title_year = _json_movies.get(title_year, 0)
-        if not title_year:
+        if not _json_movies.get(title_year):
             yield Path(root)
 
     return None
