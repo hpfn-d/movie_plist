@@ -50,7 +50,6 @@ def _new_desktop_f() -> Generator[Path, None, None]:
         teste = list(d.glob("*.desktop"))
         if teste:
             yield teste[0]
-            assert len(teste) == 1
 
     return None
 

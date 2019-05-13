@@ -15,3 +15,10 @@ test:
 
 report:
 	pipenv run codecov
+
+clean:
+	rm -fr .pytest_cache
+	rm -fr .coverage
+	rm -fr .tox
+	rm -fr movie_plist.egg-info
+	rm -fr .mypy_cache
