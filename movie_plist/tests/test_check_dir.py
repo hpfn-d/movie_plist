@@ -6,23 +6,6 @@ import pytest
 from movie_plist.data import check_dir
 
 
-def test_url_raises(mocker):
-    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    test_path_read = os.path.join(base_dir, 'tests/videos_test')
-    check_dir.CFG_FILE = 'movie_plist/tests/movie_plist.cfg'
-    with open(check_dir.CFG_FILE, 'w') as w_file:
-        w_file.write(test_path_read)
-
-    mocker.patch.object(
-        check_dir.os.path,
-        'isdir',
-        return_value=False
-    )
-    with pytest.raises(check_dir.InvalidPath):
-        check_dir.read_path()
-    os.system('/bin/rm -fr ' + check_dir.CFG_FILE)
-
-
 @pytest.fixture
 def test_cfg_file():
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -32,6 +15,13 @@ def test_cfg_file():
         w_file.write(test_path_read)
     yield test_path_read, check_dir.CFG_FILE
     os.system('/bin/rm -fr ' + check_dir.CFG_FILE)
+
+
+def test_url_raises(test_cfg_file, mocker):
+    mocker.patch.object(check_dir.os.path, 'isdir', return_value=False)
+
+    with pytest.raises(check_dir.InvalidPath):
+        check_dir.read_path()
 
 
 def test_write_path(test_cfg_file):
