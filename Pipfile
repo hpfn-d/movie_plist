@@ -1,9 +1,12 @@
 [[source]]
+
 name = "pypi"
 url = "https://pypi.org/simple"
 verify_ssl = true
 
+
 [dev-packages]
+
 pytest = "*"
 pytest-mock = "*"
 flake8 = "*"
@@ -16,12 +19,18 @@ flake8-bugbear = "*"
 flake8-pyi = "*"
 wily = "*"
 
+
 [packages]
+
 beautifulsoup4 = "*"
-pyqt5 = "==5.12.1"
+pyqt5 = "==5.12.2"
+
 
 [scripts]
+
 cov_all = "pytest --cov=movie_plist"
 
+
 [requires]
+
 python_version = "3.7"
