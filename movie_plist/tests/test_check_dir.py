@@ -50,7 +50,10 @@ def test_read_path(test_cfg_file):
 
 def test_whole_success_process(test_cfg_file):
     test_path_read, _ = test_cfg_file
-    assert test_path_read == check_dir.get_dir_path()
+    desktop_file = check_dir.get_desktopf_path()[0]
+    test_path_read += '/Shawshank Redemption, the 1994/Shawshank Redemption, the 1994.desktop'
+
+    assert test_path_read == desktop_file
 
 
 def test_fail_write_path():
@@ -114,5 +117,7 @@ def test_return_dir_after_check(test_cfg_file):
     """
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     scan_dir = os.path.join(base_dir, 'tests/videos_test')
+    scan_dir += '/Shawshank Redemption, the 1994/Shawshank Redemption, the 1994.desktop'
+    desktop_file = check_dir.get_desktopf_path()[0]
 
-    assert check_dir.get_dir_path() == scan_dir
+    assert desktop_file == scan_dir

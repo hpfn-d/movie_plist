@@ -1,4 +1,3 @@
-import os
 import re
 import time
 from pathlib import Path
@@ -8,7 +7,7 @@ from movie_plist.conf.global_conf import (
     MOVIE_PLIST_STAT, MOVIE_SEEN, MOVIE_UNSEEN
 )
 
-from .check_dir import get_dir_path
+from .check_dir import get_desktopf_path, read_path
 
 
 def create_dicts() -> None:
@@ -36,7 +35,8 @@ def _new_data() -> Generator[Tuple[str, str, str], None, None]:
     return title_year, imdb_url and path to movie
     Path obj is converted to str
     """
-    for root in _new_desktop_f():
+    # for root in _new_desktop_f():
+    for root in _unknow_dirs():
         imdb_url = _open_right_file(root)
         path = str(root.parent)
         title_year = mk_title_year(path)
@@ -46,42 +46,24 @@ def _new_data() -> Generator[Tuple[str, str, str], None, None]:
     return None
 
 
-def _new_desktop_f() -> Generator[Path, None, None]:
-    """ search for a .desktop file in a directory """
-    for d in _unknow_dirs():
-        teste = list(d.glob("*.desktop"))
-        if teste:
-            yield teste[0]
-
-    return None
-
-
 def _unknow_dirs() -> Generator[Path, None, None]:
-    """ root (path) that are not in json files
-
-    # see this later - stat info
-    directory = Path(_scan_dir)
-    ((f.stat().st_mtime, f) for f in directory.iterdir())
     """
-    _scan_dir = get_dir_path()
+    If stat changes, get the new movies
+    Write the new stat
+    """
+    path_last_movies = get_desktopf_path()
 
-    if _scan_dir == 'nothingnew':
-        return None
+    if path_last_movies != 'nothingnew':
+        _json_movies = {**MOVIE_SEEN, **MOVIE_UNSEEN}
+        for movies in path_last_movies:
+            path_obj = Path(movies)
+            title_year = mk_title_year(str(path_obj.parent))
+            if not _json_movies.get(title_year):
+                yield path_obj
 
-    _json_movies = {**MOVIE_SEEN, **MOVIE_UNSEEN}
-
-    for root, _, _ in os.walk(_scan_dir):
-        title_year = mk_title_year(root)
-        if not _json_movies.get(title_year):
-            yield Path(root)
-
-    current_stat = Path(_scan_dir).stat().st_mtime
-    last_stat = Path(MOVIE_PLIST_STAT)
-    last_stat.write_text(str(current_stat))
-
-    # current_stat = os.stat(_scan_dir)
-    # with open(current_file, 'w') as current:
-    #    current.write(str(current_stat.st_mtime))
+        _scan_dir = read_path()
+        current_stat = Path(_scan_dir).stat().st_mtime
+        Path(MOVIE_PLIST_STAT).write_text(str(current_stat))
 
     return None
 
