@@ -6,6 +6,7 @@ HOME_USER = os.environ['HOME']
 # first, main path
 MOVIE_PLIST_CACHE = os.path.join(HOME_USER, '.cache/movie_plist')
 MOVIE_PLIST_STUFF = os.path.join(HOME_USER, '.config/movie_plist')
+MOVIE_PLIST_STAT = os.path.join(MOVIE_PLIST_STUFF, 'stat_file.txt')
 CFG_FILE = os.path.join(MOVIE_PLIST_STUFF, 'movie_plist.cfg')
 SEEN_JSON_FILE = os.path.join(MOVIE_PLIST_STUFF, 'seen_movies.json')
 UNSEEN_JSON_FILE = os.path.join(MOVIE_PLIST_STUFF, 'unseen_movies.json')

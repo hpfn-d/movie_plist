@@ -3,6 +3,7 @@ from unittest.mock import Mock, patch
 
 import pytest
 
+from movie_plist.conf.global_conf import MOVIE_PLIST_STAT
 from movie_plist.pyqt_gui.right_click_menu import (
     MOVIE_SEEN, MOVIE_UNSEEN, RightClickMenu
 )
@@ -31,8 +32,12 @@ def test_mark_as_seen(create_obj):
     assert obj.qt_list.currentItem().text() in MOVIE_SEEN.keys()
 
 
-@patch('subprocess.call')
-def test_rm_from_dict(call, create_obj, mocker):
+@patch('os.system')
+def test_rm_from_dict(rm, create_obj, mocker):
+    """
+    Remove stat_file.txt
+    Does not remove poster - isfile is False
+    """
     mocker.patch.object(os.path, 'isfile', return_value=False)
     current_item = 'Brave Heart - 1995'
     current_dict = {current_item: 'blabla'}
@@ -44,11 +49,16 @@ def test_rm_from_dict(call, create_obj, mocker):
     obj.qt_list.takeItem.assert_called_once_with(0)
     assert obj.qt_list.currentItem().text() not in obj.current_dict.keys()
     assert obj.current_dict == {}
-    assert call.call_count == 0
+    assert rm.call_count == 1
+    assert not os.path.isfile(MOVIE_PLIST_STAT)
 
 
 @patch('os.system')
-def test_rm_from_cache(call, create_obj, mocker):
+def test_rm_from_cache(rm, create_obj, mocker):
+    """
+    Remove stat_file.txt
+    Pemove poster - isfile is True
+    """
     mocker.patch.object(os.path, 'isfile', return_value=True)
     current_item = 'Brave Heart - 1995'
     current_dict = {current_item: 'blabla'}
@@ -60,7 +70,7 @@ def test_rm_from_cache(call, create_obj, mocker):
     obj.qt_list.takeItem.assert_called_once_with(0)
     assert obj.qt_list.currentItem().text() not in obj.current_dict.keys()
     assert obj.current_dict == {}
-    assert call.call_count == 1
+    assert rm.call_count == 2
 
 
 @patch('movie_plist.pyqt_gui.right_click_menu.QMenu')

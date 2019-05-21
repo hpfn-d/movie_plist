@@ -5,7 +5,7 @@ from PyQt5.QtWidgets import (  # pylint: disable-msg=E0611
     QAction, QMenu, QMessageBox
 )
 
-from movie_plist.conf.global_conf import MOVIE_PLIST_CACHE
+from movie_plist.conf.global_conf import MOVIE_PLIST_CACHE, MOVIE_PLIST_STAT
 from movie_plist.data.pyscan import MOVIE_SEEN, MOVIE_UNSEEN
 
 
@@ -56,6 +56,7 @@ class RightClickMenu:
         title_year = self.qt_list.currentItem().text()
         self.qt_list.takeItem(self.qt_list.currentRow())
         del self.current_dict[title_year]
+        os.system('/bin/rm -f ' + MOVIE_PLIST_STAT)
 
         count_spaces = title_year.count(' ')
         name = title_year.replace(' ', '_', count_spaces)
