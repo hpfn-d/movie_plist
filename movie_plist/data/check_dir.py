@@ -1,9 +1,13 @@
+import glob
 import os
 import sys
 from pathlib import Path
-from typing import NoReturn, Optional
+from typing import List, NoReturn, Optional, Union
 
 from movie_plist.conf.global_conf import CFG_FILE, MOVIE_PLIST_STAT
+
+# Number of movies - last ten added
+COUNT = -10
 
 
 class InvalidPath(Exception):
@@ -30,7 +34,13 @@ def write_path(cfg_file_path: str) -> str:
     return cfg_file_path
 
 
-def get_dir_path() -> str:
+def get_desktopf_path() -> Union[str, List[str]]:
+    """
+    Get path from .cfg file or ask for it
+    Check if stat changed or has (new) .desktop files
+    Return the result or
+    Abort app
+    """
     if os.path.isfile(CFG_FILE):
         path_dir_scan = read_path()
     else:
@@ -60,21 +70,20 @@ def nothing_new(scan_dir: str) -> Optional[str]:
     return None
 
 
-def has_desktop_file(scan_dir: str) -> Optional[str]:
+def has_desktop_file(scan_dir: str) -> Union[List[str], None]:
     for _, _, filename in os.walk(scan_dir):
         for file in filename:
             if file.endswith('.desktop'):
-                return scan_dir
+                last_ones = sorted(
+                    glob.glob(os.path.join(scan_dir, '*/*.desktop')),
+                    key=os.path.getmtime
+                )
+                return last_ones[COUNT:]
 
     return None
 
 
 def abort_movie_plist(scan_dir: str) -> NoReturn:
-    # directory = Path(scan_dir)
-    # _, recent = max((f.stat().st_mtime, f) for f in directory.iterdir())
-    # print(recent)
-    # print(directory.stat().st_mtime)
-
     from PyQt5.QtWidgets import QMessageBox, QApplication  # pylint: disable-msg=E0611
 
     app = QApplication(['0'])  # noqa: F841
