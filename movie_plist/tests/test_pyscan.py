@@ -1,7 +1,8 @@
+import os
+
 import pytest
 
 from movie_plist.data import pyscan  # noqa: E402
-from movie_plist.data import check_dir
 
 expected = [
     hasattr(pyscan, 'os'),
@@ -29,12 +30,17 @@ pyscan.MOVIE_UNSEEN = dict()
 
 @pytest.fixture()
 def test_all(mocker):
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    pyscan.MOVIE_PLIST_STAT = os.path.join(base_dir, 'tests/stat_file.txt')
+
     mocker.patch.object(
-        check_dir,
-        'read_path',
+        pyscan,
+        'get_dir_path',
         return_value='movie_plist/tests/videos_test/'
     )
-    return pyscan.create_dicts()
+
+    yield pyscan.create_dicts()
+    os.system('/bin/rm -fr ' + pyscan.MOVIE_PLIST_STAT)
 
 
 def test_all_key(test_all):
@@ -56,3 +62,7 @@ def test_all_path_to(test_all):
 
 def test_all_movie_seen_len(test_all):
     assert len(pyscan.MOVIE_SEEN) == 0
+
+
+def test_write_current_stat(test_all):
+    assert os.path.isfile('movie_plist/tests/stat_file.txt')

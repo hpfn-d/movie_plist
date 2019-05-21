@@ -4,7 +4,9 @@ import time
 from pathlib import Path
 from typing import Generator, Tuple
 
-from movie_plist.conf.global_conf import MOVIE_SEEN, MOVIE_UNSEEN
+from movie_plist.conf.global_conf import (
+    MOVIE_PLIST_STAT, MOVIE_SEEN, MOVIE_UNSEEN
+)
 
 from .check_dir import get_dir_path
 
@@ -63,12 +65,23 @@ def _unknow_dirs() -> Generator[Path, None, None]:
     """
     _scan_dir = get_dir_path()
 
+    if _scan_dir == 'nothingnew':
+        return None
+
     _json_movies = {**MOVIE_SEEN, **MOVIE_UNSEEN}
 
     for root, _, _ in os.walk(_scan_dir):
         title_year = mk_title_year(root)
         if not _json_movies.get(title_year):
             yield Path(root)
+
+    current_stat = Path(_scan_dir).stat().st_mtime
+    last_stat = Path(MOVIE_PLIST_STAT)
+    last_stat.write_text(str(current_stat))
+
+    # current_stat = os.stat(_scan_dir)
+    # with open(current_file, 'w') as current:
+    #    current.write(str(current_stat.st_mtime))
 
     return None
 
