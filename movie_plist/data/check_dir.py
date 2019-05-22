@@ -71,7 +71,7 @@ def has_stat(scan_dir: str) -> Union[str, List[str]]:
 
 
 def glob_desktop_file(scan_dir: str) -> List[str]:
-    desktop_files = glob.glob(os.path.join(scan_dir, '*/*.desktop'))
+    desktop_files = glob.glob(os.path.join(scan_dir, '**/*.desktop'), recursive=True)
     desktop_files.sort(key=os.path.getmtime)
     return desktop_files
 
