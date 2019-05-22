@@ -82,6 +82,9 @@ def test_fail_scan(message, app, exit):
 
 # @patch('movie_plist.data.check_dir.Path.stat')
 def test_stat_nothingnew(test_cfg_file, mocker):
+    """
+    stat file exists, old stat is equal new stat
+    """
     class STAT:
         st_mtime = 'last_stat'
 
@@ -90,10 +93,13 @@ def test_stat_nothingnew(test_cfg_file, mocker):
     mocker.patch.object(check_dir.Path, 'read_text', return_value='last_stat')
     mocker.patch.object(check_dir.Path, 'stat', return_value=STAT())
 
-    assert check_dir.nothing_new(scan_dir) == 'nothingnew'
+    assert check_dir.has_stat(scan_dir) == 'nothingnew'
 
 
 def test_stat_differ(test_cfg_file, mocker):
+    """
+    stat file exists, old stat differ new stat
+    """
     class STAT:
         st_mtime = 'last'
 
@@ -101,13 +107,16 @@ def test_stat_differ(test_cfg_file, mocker):
     mocker.patch.object(check_dir.Path, 'is_file', return_value=True)
     mocker.patch.object(check_dir.Path, 'read_text', return_value='last_stat')
     mocker.patch.object(check_dir.Path, 'stat', return_value=STAT())
-    assert check_dir.nothing_new(scan_dir) is None
+    assert isinstance(check_dir.has_stat(scan_dir), list)
 
 
 def test_no_stat_file(test_cfg_file, mocker):
+    """
+    stat file does not exists
+    """
     scan_dir = test_cfg_file[0]
     mocker.patch.object(check_dir.Path, 'is_file', return_value=False)
-    assert check_dir.nothing_new(scan_dir) is None
+    assert isinstance(check_dir.has_stat(scan_dir), list)
 
 
 def test_return_dir_after_check(test_cfg_file):
