@@ -36,17 +36,14 @@ def _new_data() -> Generator[Tuple[str, str, str], None, None]:
     Path obj is converted to str
     """
     # for root in _new_desktop_f():
-    for root in _unknow_dirs():
-        imdb_url = _open_right_file(root)
-        path = str(root.parent)
-        title_year = mk_title_year(path)
-
-        yield (title_year, imdb_url, path)
+    for title_year, desktop_path, root in _unknow_dirs():
+        imdb_url = _open_right_file(desktop_path)
+        yield (title_year, imdb_url, root)
 
     return None
 
 
-def _unknow_dirs() -> Generator[Path, None, None]:
+def _unknow_dirs() -> Generator[Tuple[str, str, str], None, None]:
     """
     If stat changes, get the new movies
     Write the new stat
@@ -55,11 +52,11 @@ def _unknow_dirs() -> Generator[Path, None, None]:
 
     if path_last_movies != 'nothingnew':
         _json_movies = {**MOVIE_SEEN, **MOVIE_UNSEEN}
-        for movies in path_last_movies:
-            path_obj = Path(movies)
-            title_year = mk_title_year(str(path_obj.parent))
+        for movie in path_last_movies:
+            root = movie.rpartition('/')[0]
+            title_year = mk_title_year(root)
             if not _json_movies.get(title_year):
-                yield path_obj
+                yield (title_year, movie, root)
 
         new_stat()
 
@@ -72,9 +69,9 @@ def new_stat():
     Path(MOVIE_PLIST_STAT).write_text(str(current_stat))
 
 
-def _open_right_file(file_with_url: Path) -> str:
+def _open_right_file(file_with_url: str) -> str:
     """ receives a Path obj and read the content of the file """
-    file_lines = file_with_url.read_text()
+    file_lines = Path(file_with_url).read_text()
 
     pat = r"(URL|url)=https?://.*"
     line_with_url = re.search(pat, ''.join(file_lines))
@@ -82,9 +79,7 @@ def _open_right_file(file_with_url: Path) -> str:
     if line_with_url:
         return line_with_url.group(0)[4:]
 
-    desktop_file = str(file_with_url.name)
-
-    raise Exception(f'Please check {desktop_file} file. Path and content')
+    raise Exception(f'Please check {file_with_url} file. Path and content')
 
 
 def mk_title_year(root_path: str) -> str:
