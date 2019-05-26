@@ -61,11 +61,15 @@ def _unknow_dirs() -> Generator[Path, None, None]:
             if not _json_movies.get(title_year):
                 yield path_obj
 
-        _scan_dir = read_path()
-        current_stat = Path(_scan_dir).stat().st_mtime
-        Path(MOVIE_PLIST_STAT).write_text(str(current_stat))
+        new_stat()
 
     return None
+
+
+def new_stat():
+    _scan_dir = read_path()
+    current_stat = Path(_scan_dir).stat().st_mtime
+    Path(MOVIE_PLIST_STAT).write_text(str(current_stat))
 
 
 def _open_right_file(file_with_url: Path) -> str:
