@@ -1,8 +1,7 @@
 import re
 from socket import timeout
-from typing import Union
 from urllib.error import URLError
-from urllib.request import Request, urlopen
+from urllib.request import urlopen
 
 from bs4 import BeautifulSoup
 from PyQt5.QtGui import QImage  # pylint: disable-msg=E0611
@@ -17,6 +16,7 @@ class FetchImdbData:
         self._url = url
         self.title = title
         self.bs4_poster = ''
+        self.p_file = ''
         self.cache_poster = MOVIE_PLIST_CACHE + '/skrull.jpg'
 
         self.synopsis = """Maybe something is wrong with
@@ -25,7 +25,7 @@ class FetchImdbData:
 
         self.fetch(cache_poster)
 
-    def fetch(self, cache_poster: str) -> None:
+    def fetch(self, cache_poster: str):
 
         try:
             soup = BeautifulSoup(self._get_html(), 'html.parser')
@@ -44,51 +44,49 @@ class FetchImdbData:
         else:
             self.synopsis = description['content']
             self.cache_poster = cache_poster
-            self._do_poster_png_file()
+            self._poster_file()
 
-    def _do_poster_png_file(self) -> None:
+    def _save_poster_png_file(self):
         """
 
         """
-        poster_to_save = self._poster_file()
-        if poster_to_save:
-            img = QImage()  # (8,10,4)
-            img.loadFromData(poster_to_save)
-            img.save(self.cache_poster)
-            add_synopsis(self.title, self.synopsis)
+        img = QImage()  # (8,10,4)
+        img.loadFromData(self.p_file)
+        img.save(self.cache_poster)
+        add_synopsis(self.title, self.synopsis)
+
+    def _poster_file(self):
+        try:
+            self.p_file = urlopen(self._poster_url(), timeout=3).read()
+        except (URLError, ValueError, AttributeError, timeout) as e:
+            print(e)
+            print(f'Could not create poster file. {self.title}')
+            print('No movie info to save then.')
         else:
-            print('QImage - Unexpected type for a poster. Please try again.')
+            # if self.p_file.info()['Content-Lenght']:
+            self._save_poster_png_file()
 
-    def _poster_file(self) -> Union[bytes]:
-        poster_file = urlopen(self._poster_url(), timeout=3).read()
-
-        if isinstance(poster_file, bytes):
-            return poster_file
-
-        return None
-
-    def _poster_url(self) -> Union[str, Request]:
+    def _poster_url(self):
         find_url = re.search(r'\bhttp\S+jpg\b', str(self.bs4_poster))
         if find_url:
             return find_url.group(0)
 
-        print(f'Did not find a url for {self.title}')
+        print(f"Did not find a url for {self.title}")
         print("Maybe the (poster) url does not exists in the .html file")
 
-        return ''
+        return None
 
-    def _get_html(self) -> Union[bytes, str]:
+    def _get_html(self):
         """
 
         """
         try:
             return urlopen(self._url, timeout=3).read()
-        except (URLError, timeout, ValueError) as e:
-            text = "Internet or {}.desktop file problem".format(self.title)
+        except (TypeError, URLError, timeout, ValueError) as e:
             print(e)
-            print(text)
+            print(f"Internet or {self.title}.desktop file problem")
 
-        return ''
+        return None
 
 
 # helper func
