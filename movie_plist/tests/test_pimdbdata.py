@@ -66,8 +66,12 @@ def test_choice_unseen(mocker):
     A record exists in dicts and it goes to an unseen movie dict
     It is a kind of integration test
     """
-    mocker.patch.object(data_manager.FetchImdbData, '_poster_file',
-                        return_value=b'tests/Shawshank_Redemption_1994.png')
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    poster_path = os.path.join(base_dir, 'tests/Shawshank_Redemption_1994.jpg')
+
+    mocker.patch.object(data_manager.FetchImdbData, '_poster_url',
+                        return_value='file://' + poster_path)
+
     title = 'Shawshank Redemption 1994'
     fetch_data.MOVIE_UNSEEN[title] = ('root/',)
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -83,8 +87,12 @@ def test_choice_seen(mocker):
     A record exists in dicts and it goes to a seen movie dict
     It is a kind of integration test
     """
-    mocker.patch.object(data_manager.FetchImdbData, '_poster_file',
-                        return_value=b'tests/Shawshank_Redemption_1994.png')
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    poster_path = os.path.join(base_dir, 'tests/Shawshank_Redemption_1994.jpg')
+
+    mocker.patch.object(data_manager.FetchImdbData, '_poster_url',
+                        return_value='file://' + poster_path)
+
     title = 'Shawshank Redemption 1994'
     fetch_data.MOVIE_SEEN[title] = ('root/',)
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

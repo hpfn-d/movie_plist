@@ -16,7 +16,7 @@ expected = [
 
     # FetchImdbData methods
     hasattr(fetch_data.FetchImdbData, 'fetch'),
-    hasattr(fetch_data.FetchImdbData, '_do_poster_png_file'),
+    hasattr(fetch_data.FetchImdbData, '_save_poster_png_file'),
     hasattr(fetch_data.FetchImdbData, '_poster_url'),
     hasattr(fetch_data.FetchImdbData, '_poster_file'),
 ]
@@ -30,8 +30,8 @@ def test_init_mocked_attrs(e):
 # FetchImdbData tests
 @pytest.fixture
 def run_fetch(mocker):
-    mocker.patch.object(FetchImdbData, '_poster_file',
-                        return_value=b'tests/Shawshank_Redemption_1994.png')
+    # mocker.patch.object(FetchImdbData, '_poster_file',
+    #                    return_value=b'tests/Shawshank_Redemption_1994.png')
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     html_path = os.path.join(base_dir, 'tests/Shawshank_Redemption-1994.html')
     title = 'Shawshank Redemption 1994'
@@ -69,10 +69,10 @@ def test_add_synopsis_attr(add, mocker):
 
 
 @patch('movie_plist.data.fetch_data.QImage')
-@patch('movie_plist.data.fetch_data.urlopen')
+# @patch('movie_plist.data.fetch_data.urlopen')
 @patch('movie_plist.data.fetch_data.FetchImdbData._get_html')
 @patch('movie_plist.data.fetch_data.BeautifulSoup')
-def test_description_content(bs4, html, fetch, img):
+def test_description_content(bs4, html, img):
     """
     What happens when imdb data does not exists
     """
@@ -82,29 +82,36 @@ def test_description_content(bs4, html, fetch, img):
 
     assert bs4.call_count == 1
     assert html.call_count == 1
-    assert fetch.call_count == 1
+    # assert fetch.call_count == 1
     assert img.call_count == 0
 
 
 @patch('movie_plist.data.fetch_data.QImage')
-@patch('movie_plist.data.fetch_data.urlopen')
+# @patch('movie_plist.data.fetch_data.urlopen')
 @patch('movie_plist.data.fetch_data.FetchImdbData._get_html')
 @patch('movie_plist.data.fetch_data.BeautifulSoup')
-def test_url(bs4, html, fetch, img):
+def test_url(bs4, html, img):
     """
     What happens bad url
     """
     FetchImdbData('url', 'title', 'cache_poster')
     assert bs4.call_count == 1
     assert html.call_count == 1
-    assert fetch.call_count == 1
+    # assert fetch.call_count == 1
     assert img.call_count == 0
 
 
 @patch('movie_plist.data.fetch_data.QImage.save')
-def test_do_poster_steps(save_img, run_fetch):
+def test_do_poster_steps(save_img, run_fetch, mocker):
     """
     There is no poster yet. Create one and save it
     """
-    run_fetch._do_poster_png_file()
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    poster_path = os.path.join(base_dir, 'tests/Shawshank_Redemption_1994.jpg')
+
+    mocker.patch.object(FetchImdbData,
+                        '_poster_url',
+                        return_value='file://' + poster_path)
+
+    run_fetch._poster_file()
     assert save_img.call_count == 1
