@@ -2,20 +2,20 @@ import os
 
 import pytest
 
-from movie_plist.data import pyscan  # noqa: E402
+from movie_plist.data import create_dict  # noqa: E402
 
 expected = [
     # hasattr(pyscan, 'os'),
-    hasattr(pyscan, 're'),
-    hasattr(pyscan, 'time'),
+    hasattr(create_dict, 're'),
+    hasattr(create_dict, 'time'),
     # hasattr(pyscan, 'MOVIE_SEEN'),
-    hasattr(pyscan, 'MOVIE_UNSEEN'),
-    hasattr(pyscan, 'create_dicts'),
-    hasattr(pyscan, '_new_data'),
+    hasattr(create_dict, 'MOVIE_UNSEEN'),
+    hasattr(create_dict, 'create_dicts'),
+    hasattr(create_dict, '_new_data'),
     # hasattr(pyscan, '_new_desktop_f'),
-    hasattr(pyscan, '_unknow_dirs'),
-    hasattr(pyscan, '_open_right_file'),
-    hasattr(pyscan, 'mk_title_year'),
+    hasattr(create_dict, '_unknow_dirs'),
+    hasattr(create_dict, '_open_right_file'),
+    hasattr(create_dict, 'mk_title_year'),
 ]
 
 
@@ -24,8 +24,8 @@ def test_attrs(e):
     assert e
 
 
-pyscan.MOVIE_SEEN = dict()
-pyscan.MOVIE_UNSEEN = dict()
+create_dict.MOVIE_SEEN = dict()
+create_dict.MOVIE_UNSEEN = dict()
 
 
 @pytest.fixture()
@@ -33,7 +33,7 @@ def test_all(mocker):
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     # test_path_read = os.path.join(base_dir, 'tests/videos_test')
     # pyscan.MOVIE_PLIST_STAT = os.path.join(base_dir, 'tests/stat_file.json')
-    pyscan.CFG_FILE = os.path.join(base_dir, 'tests/movie_plist.cfg')
+    create_dict.CFG_FILE = os.path.join(base_dir, 'tests/movie_plist.cfg')
 
     # with open(pyscan.CFG_FILE, 'w') as w_file:
     #    w_file.write(test_path_read)
@@ -50,27 +50,27 @@ def test_all(mocker):
     # )
     #
     mocker.patch.object(
-        pyscan,
+        create_dict,
         'get_desktopf_path',
         return_value=desktop_file
     )
 
-    yield pyscan.create_dicts()
+    yield create_dict.create_dicts()
     # os.system('/bin/rm -fr ' + pyscan.MOVIE_PLIST_STAT)
-    os.system('/bin/rm -fr ' + pyscan.CFG_FILE)
+    os.system('/bin/rm -fr ' + create_dict.CFG_FILE)
 
 
 def test_all_key(test_all):
-    assert 'Shawshank Redemption, the 1994' in pyscan.MOVIE_UNSEEN.keys()
+    assert 'Shawshank Redemption, the 1994' in create_dict.MOVIE_UNSEEN.keys()
 
 
 def test_all_url(test_all):
-    url, _ = list(pyscan.MOVIE_UNSEEN.values())[0]
+    url, _ = list(create_dict.MOVIE_UNSEEN.values())[0]
     assert 'https://www.imdb.com/title/tt0111161/' == url
 
 
 def test_all_path_to(test_all):
-    _, path_to = list(pyscan.MOVIE_UNSEEN.values())[0]
+    _, path_to = list(create_dict.MOVIE_UNSEEN.values())[0]
 
     movie_dir = 'movie_plist/tests/videos_test/Shawshank Redemption, the 1994'
 
@@ -78,7 +78,7 @@ def test_all_path_to(test_all):
 
 
 def test_all_movie_seen_len(test_all):
-    assert len(pyscan.MOVIE_SEEN) == 0
+    assert len(create_dict.MOVIE_SEEN) == 0
 
 # def test_write_current_stat(test_all):
 #    assert os.path.isfile('movie_plist/tests/stat_file.json')
