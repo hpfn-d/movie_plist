@@ -35,7 +35,7 @@ def test_mark_as_seen(create_obj):
 @patch('os.system')
 def test_rm_from_dict(rm, create_obj, mocker):
     """
-    Remove stat_file.txt
+    Remove stat_file.json
     Does not remove poster - isfile is False
     """
     mocker.patch.object(os.path, 'isfile', return_value=False)
@@ -56,7 +56,7 @@ def test_rm_from_dict(rm, create_obj, mocker):
 @patch('os.system')
 def test_rm_from_cache(rm, create_obj, mocker):
     """
-    Remove stat_file.txt
+    Remove stat_file.json
     Pemove poster - isfile is True
     """
     mocker.patch.object(os.path, 'isfile', return_value=True)

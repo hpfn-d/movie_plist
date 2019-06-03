@@ -22,3 +22,4 @@ clean:
 	rm -fr .tox
 	rm -fr movie_plist.egg-info
 	rm -fr .mypy_cache
+	find ./ -name '__pycache__' -type d | xargs rm -fr
