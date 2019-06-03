@@ -309,10 +309,10 @@
         },
         "plotly": {
             "hashes": [
-                "sha256:498c35a2a482f7c7937fc2f3681fec653a0191dd21e40e754a6b774234cd167e",
-                "sha256:545e01f400345d9a3914f3e8ede033908cdb19525559782e46449be84b8f9a56"
+                "sha256:5dcb33f5c9a00e1d68ac567340b58e90c07ba93767ad3e360dd6aa11cf568a98",
+                "sha256:ab51c41f3212c5b50238abc1be070cdf79dea60a127216e7c2f1829d14113b49"
             ],
-            "version": "==3.9.0"
+            "version": "==3.10.0"
         },
         "pluggy": {
             "hashes": [
