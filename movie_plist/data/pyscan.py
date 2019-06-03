@@ -3,15 +3,13 @@ import time
 from pathlib import Path
 from typing import Generator, Tuple
 
-from movie_plist.conf.global_conf import (
-    MOVIE_PLIST_STAT, MOVIE_SEEN, MOVIE_UNSEEN
-)
+from movie_plist.conf.global_conf import MOVIE_SEEN, MOVIE_UNSEEN
 
-from .check_dir import get_desktopf_path, read_path
+from .check_dir import get_desktopf_path
 
 
 def create_dicts() -> None:
-    """
+    """l
     # get seen movies from json file
     # get unseen movies from on json file
     # check for new moview
@@ -58,15 +56,7 @@ def _unknow_dirs() -> Generator[Tuple[str, str, str], None, None]:
             if not _json_movies.get(title_year):
                 yield (title_year, movie, root)
 
-        new_stat()
-
     return None
-
-
-def new_stat():
-    _scan_dir = read_path()
-    current_stat = Path(_scan_dir).stat().st_mtime
-    Path(MOVIE_PLIST_STAT).write_text(str(current_stat))
 
 
 def _open_right_file(file_with_url: str) -> str:

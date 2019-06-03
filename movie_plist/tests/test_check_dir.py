@@ -3,6 +3,7 @@ from unittest.mock import patch
 
 import pytest
 
+from movie_plist.conf.global_conf import dump_json_movie, load_from_json
 from movie_plist.data import check_dir
 
 
@@ -11,12 +12,13 @@ def test_cfg_file():
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     test_path_read = os.path.join(base_dir, 'tests/videos_test')
     check_dir.CFG_FILE = 'movie_plist/tests/movie_plist.cfg'
-    check_dir.MOVIE_PLIST_STAT = 'movie_plist/tests/stat_file.txt'
+    check_dir.MOVIE_PLIST_STAT = 'movie_plist/tests/stat_file.json'
+    last_stat = {'old_ones': 'test', 'stat': 0}
 
     with open(check_dir.CFG_FILE, 'w') as w_file:
         w_file.write(test_path_read)
-    with open(check_dir.MOVIE_PLIST_STAT, 'w') as stat_file:
-        stat_file.write('last_stat')
+
+    dump_json_movie(last_stat, check_dir.MOVIE_PLIST_STAT)
 
     yield test_path_read, check_dir.CFG_FILE
     os.system('/bin/rm -fr ' + check_dir.CFG_FILE)
@@ -45,15 +47,15 @@ def test_read_path(test_cfg_file):
     test_path_read, _ = test_cfg_file
 
     assert 'videos_test' in test_path_read
-    assert check_dir.read_path() == test_path_read
+    assert check_dir.read_path() in test_path_read
 
 
 def test_whole_success_process(test_cfg_file):
     test_path_read, _ = test_cfg_file
-    desktop_file = check_dir.get_desktopf_path()[0]
+    desktop_file = check_dir.get_desktopf_path()
     test_path_read += '/Shawshank Redemption, the 1994/Shawshank Redemption, the 1994.desktop'
 
-    assert test_path_read == desktop_file
+    assert test_path_read in desktop_file
 
 
 def test_fail_write_path():
@@ -85,12 +87,17 @@ def test_stat_nothingnew(test_cfg_file, mocker):
     """
     stat file exists, old stat is equal new stat
     """
+    last_stat = dict(
+        old_ones=list(),
+        stat=0
+    )
+
     class STAT:
-        st_mtime = 'last_stat'
+        st_mtime = 0
 
     scan_dir = test_cfg_file[0]
     mocker.patch.object(check_dir.Path, 'is_file', return_value=True)
-    mocker.patch.object(check_dir.Path, 'read_text', return_value='last_stat')
+    mocker.patch.object(check_dir, 'load_from_json', return_value=last_stat)
     mocker.patch.object(check_dir.Path, 'stat', return_value=STAT())
 
     assert check_dir.has_stat(scan_dir) == 'nothingnew'
@@ -100,14 +107,21 @@ def test_stat_differ(test_cfg_file, mocker):
     """
     stat file exists, old stat differ new stat
     """
+    last_stat = dict(
+        old_ones=list(),
+        stat=0
+    )
+
     class STAT:
-        st_mtime = 'last'
+        st_mtime = 1
 
     scan_dir = test_cfg_file[0]
     mocker.patch.object(check_dir.Path, 'is_file', return_value=True)
-    mocker.patch.object(check_dir.Path, 'read_text', return_value='last_stat')
+    mocker.patch.object(check_dir, 'load_from_json', return_value=last_stat)
     mocker.patch.object(check_dir.Path, 'stat', return_value=STAT())
-    assert isinstance(check_dir.has_stat(scan_dir), list)
+    # this will change to a set()
+    # test more than is instance
+    assert isinstance(check_dir.has_stat(scan_dir), set)
 
 
 def test_no_stat_file(test_cfg_file, mocker):
@@ -116,7 +130,7 @@ def test_no_stat_file(test_cfg_file, mocker):
     """
     scan_dir = test_cfg_file[0]
     mocker.patch.object(check_dir.Path, 'is_file', return_value=False)
-    assert isinstance(check_dir.has_stat(scan_dir), list)
+    assert isinstance(check_dir.has_stat(scan_dir), set)
 
 
 def test_return_dir_after_check(test_cfg_file):
@@ -127,6 +141,12 @@ def test_return_dir_after_check(test_cfg_file):
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     scan_dir = os.path.join(base_dir, 'tests/videos_test')
     scan_dir += '/Shawshank Redemption, the 1994/Shawshank Redemption, the 1994.desktop'
-    desktop_file = check_dir.get_desktopf_path()[0]
+    desktop_file = check_dir.get_desktopf_path()
 
-    assert desktop_file == scan_dir
+    assert scan_dir in desktop_file
+
+
+def test_json(test_cfg_file):
+    g = load_from_json(check_dir.MOVIE_PLIST_STAT)
+    assert 'old_ones' in g.keys()
+    assert 'stat' in g.keys()

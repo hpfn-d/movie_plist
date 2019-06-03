@@ -2,11 +2,12 @@ import json
 import os
 
 # user
+
 HOME_USER = os.environ['HOME']
 # first, main path
 MOVIE_PLIST_CACHE = os.path.join(HOME_USER, '.cache/movie_plist')
 MOVIE_PLIST_STUFF = os.path.join(HOME_USER, '.config/movie_plist')
-MOVIE_PLIST_STAT = os.path.join(MOVIE_PLIST_STUFF, 'stat_file.txt')
+MOVIE_PLIST_STAT = os.path.join(MOVIE_PLIST_STUFF, 'stat_file.json')
 CFG_FILE = os.path.join(MOVIE_PLIST_STUFF, 'movie_plist.cfg')
 SEEN_JSON_FILE = os.path.join(MOVIE_PLIST_STUFF, 'seen_movies.json')
 UNSEEN_JSON_FILE = os.path.join(MOVIE_PLIST_STUFF, 'unseen_movies.json')
@@ -34,4 +35,4 @@ MOVIE_UNSEEN = load_from_json(UNSEEN_JSON_FILE)
 
 def dump_json_movie(movie_dic, json_file):
     with open(json_file, 'w') as outfile:
-        json.dump(movie_dic, outfile, sort_keys=True)
+        json.dump(movie_dic, outfile, sort_keys=True, allow_nan=False)

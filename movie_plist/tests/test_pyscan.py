@@ -31,24 +31,24 @@ pyscan.MOVIE_UNSEEN = dict()
 @pytest.fixture()
 def test_all(mocker):
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    test_path_read = os.path.join(base_dir, 'tests/videos_test')
-    pyscan.MOVIE_PLIST_STAT = os.path.join(base_dir, 'tests/stat_file.txt')
+    # test_path_read = os.path.join(base_dir, 'tests/videos_test')
+    # pyscan.MOVIE_PLIST_STAT = os.path.join(base_dir, 'tests/stat_file.json')
     pyscan.CFG_FILE = os.path.join(base_dir, 'tests/movie_plist.cfg')
 
-    with open(pyscan.CFG_FILE, 'w') as w_file:
-        w_file.write(test_path_read)
+    # with open(pyscan.CFG_FILE, 'w') as w_file:
+    #    w_file.write(test_path_read)
 
     movie_dir = 'movie_plist/tests/videos_test/'
     movie_dir += 'Shawshank Redemption, the 1994/Shawshank Redemption, the 1994.desktop'
 
     desktop_file = [movie_dir]
 
-    mocker.patch.object(
-        pyscan,
-        'read_path',
-        return_value=test_path_read
-    )
-
+    # mocker.patch.object(
+    #     pyscan,
+    #     'read_path',
+    #     return_value=test_path_read
+    # )
+    #
     mocker.patch.object(
         pyscan,
         'get_desktopf_path',
@@ -56,7 +56,7 @@ def test_all(mocker):
     )
 
     yield pyscan.create_dicts()
-    os.system('/bin/rm -fr ' + pyscan.MOVIE_PLIST_STAT)
+    # os.system('/bin/rm -fr ' + pyscan.MOVIE_PLIST_STAT)
     os.system('/bin/rm -fr ' + pyscan.CFG_FILE)
 
 
@@ -80,6 +80,5 @@ def test_all_path_to(test_all):
 def test_all_movie_seen_len(test_all):
     assert len(pyscan.MOVIE_SEEN) == 0
 
-
-def test_write_current_stat(test_all):
-    assert os.path.isfile('movie_plist/tests/stat_file.txt')
+# def test_write_current_stat(test_all):
+#    assert os.path.isfile('movie_plist/tests/stat_file.json')
