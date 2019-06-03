@@ -8,7 +8,7 @@ from PyQt5.QtGui import QImage  # pylint: disable-msg=E0611
 
 from movie_plist.conf.global_conf import MOVIE_PLIST_CACHE
 
-from .pyscan import MOVIE_SEEN, MOVIE_UNSEEN
+from .create_dict import MOVIE_SEEN, MOVIE_UNSEEN
 
 
 class FetchImdbData:

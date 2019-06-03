@@ -5,7 +5,7 @@ from zetcode tutorial
 from PyQt5.QtCore import QTimer  # pylint: disable-msg=E0611
 from PyQt5.QtWidgets import QAction, QMainWindow  # pylint: disable-msg=E0611
 
-from movie_plist.data.pyscan import MOVIE_SEEN, MOVIE_UNSEEN
+from movie_plist.data.create_dict import MOVIE_SEEN, MOVIE_UNSEEN
 
 from . import splitter
 

@@ -5,31 +5,9 @@ from pathlib import Path
 from typing import List, NoReturn, Set, Union
 
 from movie_plist.conf.global_conf import (
-    CFG_FILE, MOVIE_PLIST_STAT, dump_json_movie, load_from_json
+    CFG_FILE, MOVIE_PLIST_STAT, dump_json_movie, load_from_json, read_path,
+    write_path
 )
-
-
-class InvalidPath(Exception):
-    pass
-
-
-def read_path() -> str:
-    cfg_file_path = Path(CFG_FILE).read_text()
-
-    if not os.path.isdir(cfg_file_path):
-        raise InvalidPath('Invalid path in movie_plist.cfg file.')
-
-    return cfg_file_path
-
-
-def write_path(cfg_file_path: str) -> str:
-    if not os.path.isdir(cfg_file_path):
-        raise InvalidPath('Invalid path. Please try again.')
-
-    w_path = Path(CFG_FILE)
-    w_path.write_text(cfg_file_path)
-
-    return cfg_file_path
 
 
 def get_desktopf_path() -> Union[str, Set[str], List[str]]:
@@ -41,16 +19,11 @@ def get_desktopf_path() -> Union[str, Set[str], List[str]]:
     """
     if os.path.isfile(CFG_FILE):
         path_dir_scan = read_path()
-        do_scan: Union[str, Set[str], List[str]] = has_stat(path_dir_scan)
+        return has_stat(path_dir_scan)
     else:
         get_dir_scan = input(" Do the scan in which directory ? ")
-        path_dir_scan = write_path(get_dir_scan)
-        do_scan = glob_desktop_file(get_dir_scan)
-
-    if do_scan:
-        return do_scan
-
-    abort_movie_plist(path_dir_scan)
+        write_path(get_dir_scan)
+        return glob_desktop_file(get_dir_scan)
 
 
 def has_stat(scan_dir: str) -> Union[str, Set[str]]:
@@ -84,7 +57,11 @@ def new_desktop_files(scan_dir: str, last_scan_dir_state: dict) -> Set[str]:
 
 
 def glob_desktop_file(scan_dir: str) -> List[str]:
-    return glob.glob(os.path.join(scan_dir, '**/*.desktop'), recursive=True)
+    d_files = glob.glob(os.path.join(scan_dir, '**/*.desktop'), recursive=True)
+    if d_files:
+        return d_files
+
+    abort_movie_plist(scan_dir)
 
 
 def abort_movie_plist(scan_dir: str) -> NoReturn:

@@ -1,7 +1,7 @@
 import json
 import os
-
 # user
+from pathlib import Path
 
 HOME_USER = os.environ['HOME']
 # first, main path
@@ -36,3 +36,26 @@ MOVIE_UNSEEN = load_from_json(UNSEEN_JSON_FILE)
 def dump_json_movie(movie_dic, json_file):
     with open(json_file, 'w') as outfile:
         json.dump(movie_dic, outfile, sort_keys=True, allow_nan=False)
+
+
+class InvalidPath(Exception):
+    pass
+
+
+def read_path() -> str:
+    cfg_file_path = Path(CFG_FILE).read_text()
+
+    if not os.path.isdir(cfg_file_path):
+        raise InvalidPath('Invalid path in movie_plist.cfg file.')
+
+    return cfg_file_path
+
+
+def write_path(cfg_file_path: str) -> str:
+    if not os.path.isdir(cfg_file_path):
+        raise InvalidPath('Invalid path. Please try again.')
+
+    w_path = Path(CFG_FILE)
+    w_path.write_text(cfg_file_path)
+
+    return cfg_file_path

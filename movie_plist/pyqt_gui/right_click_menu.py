@@ -6,7 +6,7 @@ from PyQt5.QtWidgets import (  # pylint: disable-msg=E0611
 )
 
 from movie_plist.conf.global_conf import MOVIE_PLIST_CACHE, MOVIE_PLIST_STAT
-from movie_plist.data.pyscan import MOVIE_SEEN, MOVIE_UNSEEN
+from movie_plist.data.create_dict import MOVIE_SEEN, MOVIE_UNSEEN
 
 
 class RightClickMenu:

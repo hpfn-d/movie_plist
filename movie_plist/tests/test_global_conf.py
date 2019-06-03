@@ -39,6 +39,9 @@ def mock_attrs():
 
     global_conf.check_movie_plist_dirs()
 
+    with open(global_conf.CFG_FILE, 'w') as w_file:
+        w_file.write('movie_plist/tests/')
+
     for json_file in [global_conf.SEEN_JSON_FILE, global_conf.UNSEEN_JSON_FILE]:
         if not os.path.isfile(json_file):
             with open(json_file, 'w') as j_file:
@@ -67,3 +70,28 @@ def test_cache_dir(mock_attrs):
 
 def test_config_dir(mock_attrs):
     assert 'home/.config/movie_plist' in global_conf.MOVIE_PLIST_STUFF
+
+
+def test_invalid_path(mock_attrs, mocker):
+    mocker.patch.object(global_conf.os.path, 'isdir', return_value=False)
+
+    with pytest.raises(global_conf.InvalidPath):
+        global_conf.read_path()
+
+
+def test_write_path(mock_attrs):
+    """
+    call write_path to create movie_plist.cfg file
+    """
+    test_path = 'movie_plist/tests'
+    cfg_file = mock_attrs.CFG_FILE
+    assert os.path.isdir(test_path)
+    r_path = global_conf.write_path(test_path)
+    assert r_path == test_path
+    assert os.path.isfile(cfg_file)
+
+# def test_read_path(mock_attrs):
+#    test_path_read = global_conf.read_path()
+#
+#    # assert 'videos_test' in test_path_read
+#    assert global_conf.read_path() in test_path_read
