@@ -27,13 +27,12 @@
         },
         "pyqt5": {
             "hashes": [
-                "sha256:06cb9a1ea1289ca2b2d81f9a2da44a05029d5b4d36fa47b6a0c0b9027ff03fef",
-                "sha256:44b263f395045eb5bba34f4df2d269e07b1e073fd359645b022943dd1accadfd",
-                "sha256:bb4ec5583baa18f741ec6c229489dc1910290d4ce4d6756a2ea062f7bf6456e6",
-                "sha256:c168a8883bbe7877809c3239c5dcfb9e8de5fe7e8e828c8add7e4f77cc8fc02a"
+                "sha256:5b64231a569913bccbf5cef36070a1c67328b3fd081e7c97b66b0d720b553ab4",
+                "sha256:ac95e7430ee65dd3690a4f06a31a14ef8b0e507e1e7003179b6622759043b60c",
+                "sha256:afeceb2aa02bcd426ed58cf7a0b2de4b6d0b2a5c81f1587493acc08df4807ee8",
+                "sha256:eb9a0c732c78c379730e25c51d35b1f83faeea059e9ccb4dbe115f9c226c4739"
             ],
-            "index": "pypi",
-            "version": "==5.12.2"
+            "version": "==5.12.3"
         },
         "pyqt5-sip": {
             "hashes": [
@@ -375,13 +374,12 @@
         },
         "pyqt5": {
             "hashes": [
-                "sha256:06cb9a1ea1289ca2b2d81f9a2da44a05029d5b4d36fa47b6a0c0b9027ff03fef",
-                "sha256:44b263f395045eb5bba34f4df2d269e07b1e073fd359645b022943dd1accadfd",
-                "sha256:bb4ec5583baa18f741ec6c229489dc1910290d4ce4d6756a2ea062f7bf6456e6",
-                "sha256:c168a8883bbe7877809c3239c5dcfb9e8de5fe7e8e828c8add7e4f77cc8fc02a"
+                "sha256:5b64231a569913bccbf5cef36070a1c67328b3fd081e7c97b66b0d720b553ab4",
+                "sha256:ac95e7430ee65dd3690a4f06a31a14ef8b0e507e1e7003179b6622759043b60c",
+                "sha256:afeceb2aa02bcd426ed58cf7a0b2de4b6d0b2a5c81f1587493acc08df4807ee8",
+                "sha256:eb9a0c732c78c379730e25c51d35b1f83faeea059e9ccb4dbe115f9c226c4739"
             ],
-            "index": "pypi",
-            "version": "==5.12.2"
+            "version": "==5.12.3"
         },
         "pyqt5-sip": {
             "hashes": [
