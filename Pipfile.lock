@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "5a9b3a103c370df8280f7e33372f0b1ed922369f0cfc5f55ee63bc051fc9030a"
+            "sha256": "57c06801de789277bd31cb9efded346591a4d156eabe69b52a72bfd0be89966e"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -32,6 +32,7 @@
                 "sha256:afeceb2aa02bcd426ed58cf7a0b2de4b6d0b2a5c81f1587493acc08df4807ee8",
                 "sha256:eb9a0c732c78c379730e25c51d35b1f83faeea059e9ccb4dbe115f9c226c4739"
             ],
+            "index": "pypi",
             "version": "==5.12.3"
         },
         "pyqt5-sip": {
@@ -247,6 +248,7 @@
                 "sha256:54da7e92468955c4fceacd0c86bd0ec997b0e1ee80d97f67c35a78b719dccab1",
                 "sha256:6e811fcb295968434526407adb8796944f1988c5b65e8139058f2014cbe100fd"
             ],
+            "index": "pypi",
             "version": "==4.3.21"
         },
         "jsonschema": {
@@ -377,6 +379,7 @@
                 "sha256:afeceb2aa02bcd426ed58cf7a0b2de4b6d0b2a5c81f1587493acc08df4807ee8",
                 "sha256:eb9a0c732c78c379730e25c51d35b1f83faeea059e9ccb4dbe115f9c226c4739"
             ],
+            "index": "pypi",
             "version": "==5.12.3"
         },
         "pyqt5-sip": {
@@ -418,6 +421,7 @@
                 "sha256:2878de8ae1c79a62c012da6186b88ff0562ea96ce29c4208d2a9b11d9f607df1",
                 "sha256:95b700cf21ed5b7e91bce7a6b5a573b2e3ef7b3643d00f681d8f9c4672f9fbdf"
             ],
+            "index": "pypi",
             "version": "==5.0.0"
         },
         "pytest-cov": {
@@ -492,10 +496,11 @@
         },
         "tox": {
             "hashes": [
-                "sha256:45a265e953368fb372cca3eac33b69fdb1b1453e5b114be231c84fc3dfadceed",
-                "sha256:f5cb0b5b8d14f2100982b0981c750d840228180a348e6bad355aa38e949fbc3f"
+                "sha256:dab0b0160dd187b654fc33d690ee1d7bf328bd5b8dc6ef3bb3cc468969c659ba",
+                "sha256:ee35ffce74933a6c6ac10c9a0182e41763140a5a5070e21b114feca56eaccdcd"
             ],
-            "version": "==3.13.1"
+            "index": "pypi",
+            "version": "==3.13.2"
         },
         "traitlets": {
             "hashes": [
