@@ -23,7 +23,7 @@ wily = "*"
 [packages]
 
 beautifulsoup4 = "*"
-pyqt5 = "==5.12.3"
+pyqt5 = "==5.13.0"
 
 
 [scripts]
