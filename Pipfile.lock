@@ -542,11 +542,10 @@
         },
         "wily": {
             "hashes": [
-                "sha256:3c9a9f931d051ca7874df035c0518aa67569ac68da06c6cca0823626277130b9",
-                "sha256:e13810f60cb436b7dc0aa6a70a584db297bbecf8553ba2981b822e4160d06ba4"
+                "sha256:4911887351d37f08b67d20611f5dd05f27d85ec43385295f7e530585a68086a0",
+                "sha256:7d0b0f6b13c4b93e65e377c839d2a74a4618274f2dbf2ababaaf19799a7febf9"
             ],
-            "index": "pypi",
-            "version": "==1.12.2"
+            "version": "==1.12.4"
         },
         "zipp": {
             "hashes": [
