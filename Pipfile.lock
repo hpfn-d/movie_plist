@@ -280,19 +280,22 @@
         },
         "mypy": {
             "hashes": [
-                "sha256:0107bff4f46a289f0e4081d59b77cef1c48ea43da5a0dbf0005d54748b26df2a",
-                "sha256:07957f5471b3bb768c61f08690c96d8a09be0912185a27a68700f3ede99184e4",
-                "sha256:10af62f87b6921eac50271e667cc234162a194e742d8e02fc4ddc121e129a5b0",
-                "sha256:11fd60d2f69f0cefbe53ce551acf5b1cec1a89e7ce2d47b4e95a84eefb2899ae",
-                "sha256:15e43d3b1546813669bd1a6ec7e6a11d2888db938e0607f7b5eef6b976671339",
-                "sha256:352c24ba054a89bb9a35dd064ee95ab9b12903b56c72a8d3863d882e2632dc76",
-                "sha256:437020a39417e85e22ea8edcb709612903a9924209e10b3ec6d8c9f05b79f498",
-                "sha256:49925f9da7cee47eebf3420d7c0e00ec662ec6abb2780eb0a16260a7ba25f9c4",
-                "sha256:6724fcd5777aa6cebfa7e644c526888c9d639bd22edd26b2a8038c674a7c34bd",
-                "sha256:7a17613f7ea374ab64f39f03257f22b5755335b73251d0d253687a69029701ba",
-                "sha256:cdc1151ced496ca1496272da7fc356580e95f2682be1d32377c22ddebdf73c91"
+                "sha256:1fe322a51df7ec60e4060c358422732359dda4467c1bd240f2172433b26b39be",
+                "sha256:2bc1fe8f793f1b1809afd6f57c2d9b948e1bf525a78e4c2957392a383c86a4a4",
+                "sha256:43335f3ff3288eb877de6d186ec08e10ea61093405189678756e14c7ccee4a9b",
+                "sha256:5c75603ea44bffad0356df333bd1b411facad321e0692d6b0687d65d94fcd8e1",
+                "sha256:738a8df84da4e9ce1f59cbdebc7d1d03310149405df9a95308d4f2a62a6d7c13",
+                "sha256:845abd8a9537da01e6b96f091e2d6d4ece18e52339f81f9fbbac1b6db2aa8d2d",
+                "sha256:94bb664868b5cf4ca1147d875a4c77883d8c605cf2e916853006e4c6194f1e84",
+                "sha256:b0c6ae0cb991a7a11013d0cc7edf8343184465b6e2dcbb9e44265c7bb3fde3af",
+                "sha256:ca56382e6ebdeb3cb928ae4ce87031cc752a1eca40ff86abc14dc712def41798",
+                "sha256:d6e9611ae026be70604672cd71bee468cb231078d8d9b3d6b43f8dcbd4d9b776",
+                "sha256:d7c9255ba6626e1745bd68e1b85e3d7888844eaf38252fefb8157194e55fd3e9",
+                "sha256:e2f193a2076e4508a88c93c25348a1cea5e6b717ee50b4422a001e9ac819c3d5",
+                "sha256:e60674723cad7b7c7fc4e9075f7a9d5d927d23d290e30cf86aeb987ef135ca1d",
+                "sha256:ec45f2a5935b291d86974a24e09676e467ac108d0c7ce94de44d7650c43a5805"
             ],
-            "version": "==0.720"
+            "version": "==0.781"
         },
         "mypy-extensions": {
             "hashes": [
