@@ -441,10 +441,10 @@
         },
         "radon": {
             "hashes": [
-                "sha256:0cde1953547a164d24420ed6ccdfa18b61f1457b96a2b99ff0de76b22d504a0f",
-                "sha256:ee20308ce8bae7a89b067425b63b141a0077632ab318d5288da649c830882b3d"
+                "sha256:29b4694ed2ceee0874661cba0ceb0174fe1ce31ee30915f672b26bc9be98cf9e",
+                "sha256:63a7876101a64d5418fa9acebff11f9bb48367ac79f22bf3b73c7bf430a8abc0"
             ],
-            "version": "==3.0.3"
+            "version": "==4.3.1"
         },
         "requests": {
             "hashes": [
