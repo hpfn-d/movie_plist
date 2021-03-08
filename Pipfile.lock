@@ -247,10 +247,10 @@
         },
         "importlib-metadata": {
             "hashes": [
-                "sha256:23d3d873e008a513952355379d93cbcab874c58f4f034ff657c7a87422fa64e8",
-                "sha256:80d2de76188eabfbfcf27e6a37342c2827801e59c4cc14b0371c56fed43820e3"
+                "sha256:18d5ff601069f98d5d605b6a4b50c18a34811d655c55548adc833e687289acde",
+                "sha256:407d13f55dc6f2a844e62325d18ad7019a436c4bfcaee34cda35f2be6e7c3e34"
             ],
-            "version": "==0.19"
+            "version": "==3.7.2"
         },
         "ipython-genutils": {
             "hashes": [
