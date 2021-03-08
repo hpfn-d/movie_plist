@@ -470,10 +470,10 @@
         },
         "radon": {
             "hashes": [
-                "sha256:0cde1953547a164d24420ed6ccdfa18b61f1457b96a2b99ff0de76b22d504a0f",
-                "sha256:ee20308ce8bae7a89b067425b63b141a0077632ab318d5288da649c830882b3d"
+                "sha256:73798b6fd188f511041e6c82551972b39dd4b1c634b6649851246a50b72d9716",
+                "sha256:7b67593910835547901bbc5cab212fa5a11662e6e9415f2becddc493d6dab5a4"
             ],
-            "version": "==3.0.3"
+            "version": "==4.4.0"
         },
         "requests": {
             "hashes": [
