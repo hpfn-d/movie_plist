@@ -107,10 +107,10 @@
         },
         "colorlog": {
             "hashes": [
-                "sha256:3cf31b25cbc8f86ec01fef582ef3b840950dea414084ed19ab922c8b493f9b42",
-                "sha256:450f52ea2a2b6ebb308f034ea9a9b15cea51e65650593dca1da3eb792e4e4981"
+                "sha256:3dd15cb27e8119a24c1a7b5c93f9f3b455855e0f73993b1c25921b2f646f1dcd",
+                "sha256:59b53160c60902c405cdec28d38356e09d40686659048893e026ecbd589516b1"
             ],
-            "version": "==4.0.2"
+            "version": "==4.8.0"
         },
         "coverage": {
             "hashes": [
