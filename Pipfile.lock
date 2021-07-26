@@ -233,10 +233,10 @@
         },
         "gitpython": {
             "hashes": [
-                "sha256:947cc75913e7b6da108458136607e2ee0e40c20be1e12d4284e7c6c12956c276",
-                "sha256:d2f4945f8260f6981d724f5957bc076398ada55cb5d25aaee10108bcdc894100"
+                "sha256:17690588e36bd0cee21921ce621fad1e8be45a37afa486ff846fb8efcf53c34c",
+                "sha256:18f4039b96b5567bc4745eb851737ce456a2d499cecd71e84f5c0950e92d0e53"
             ],
-            "version": "==3.0.2"
+            "version": "==3.1.19"
         },
         "idna": {
             "hashes": [
