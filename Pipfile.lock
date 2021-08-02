@@ -539,11 +539,10 @@
         },
         "tox": {
             "hashes": [
-                "sha256:dab0b0160dd187b654fc33d690ee1d7bf328bd5b8dc6ef3bb3cc468969c659ba",
-                "sha256:ee35ffce74933a6c6ac10c9a0182e41763140a5a5070e21b114feca56eaccdcd"
+                "sha256:60eda26fa47b7130e6fc1145620b1fd897963af521093c3685c3f63d1c394029",
+                "sha256:9850daeb96d21b4abf049bc5f197426123039e383ebfed201764e9355fc5a880"
             ],
-            "index": "pypi",
-            "version": "==3.13.2"
+            "version": "==3.24.1"
         },
         "traitlets": {
             "hashes": [
