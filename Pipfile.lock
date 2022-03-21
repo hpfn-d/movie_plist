@@ -193,10 +193,10 @@
         },
         "flake8-bugbear": {
             "hashes": [
-                "sha256:d8c466ea79d5020cb20bf9f11cf349026e09517a42264f313d3f6fddb83e0571",
-                "sha256:ded4d282778969b5ab5530ceba7aa1a9f1b86fa7618fc96a19a1d512331640f8"
+                "sha256:152e64a86f6bff6e295d630ccc993f62434c1fd2b20d2fae47547cb1c1b868e0",
+                "sha256:19fe179ee3286e16198603c438788e2949e79f31d653f0bdb56d53fb69217bd0"
             ],
-            "version": "==19.8.0"
+            "version": "==22.3.20"
         },
         "flake8-polyfill": {
             "hashes": [
