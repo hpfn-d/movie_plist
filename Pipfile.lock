@@ -203,11 +203,10 @@
         },
         "flake8-pyi": {
             "hashes": [
-                "sha256:3646134dcc5269d3fd017624961de83cc0a0404f620233885ad86faf64265a11",
-                "sha256:a93a47ac78b6d363545885e9254d0eccac8a88c3806ab8af27e30dd8c058654f"
+                "sha256:2159dbb93889cce713c4e53de5e86e787f263f4c11582249f5b1f5edb1c84b00",
+                "sha256:53749fe2a9349d77fa8be23669b5bfd48dd5cc75117438b501e3ca81255a377e"
             ],
-            "index": "pypi",
-            "version": "==19.3.0"
+            "version": "==22.4.0"
         },
         "future": {
             "hashes": [
