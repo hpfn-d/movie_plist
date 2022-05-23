@@ -538,10 +538,10 @@
         },
         "traitlets": {
             "hashes": [
-                "sha256:9c4bd2d267b7153df9152698efb1050a5d84982d3384a37b2c1f7723ba3e7835",
-                "sha256:c6cb5e6f57c5a9bdaa40fa71ce7b4af30298fbab9ece9815b5d995ab6217c7d9"
+                "sha256:70815ecb20ec619d1af28910ade523383be13754283aef90528eb3d47b77c5db",
+                "sha256:f44b708d33d98b0addb40c29d148a761f44af740603a8fd0e2f8b5b27cf0f087"
             ],
-            "version": "==4.3.2"
+            "version": "==5.2.1.post0"
         },
         "typed-ast": {
             "hashes": [
