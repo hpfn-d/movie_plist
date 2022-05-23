@@ -422,10 +422,10 @@
         },
         "pyqt5-stubs": {
             "hashes": [
-                "sha256:070afa9557a886363146794623f85141ae5aef12408b8335fa583507f5207cb7"
+                "sha256:7fb8177c72489a8911f021b7bd7c33f12c87f6dba92dcef3fdcdb5d9400f0f3f",
+                "sha256:91270ac23ebf38a1dc04cd97aa852cd08af82dc839100e5395af1447e3e99707"
             ],
-            "index": "pypi",
-            "version": "==5.12.1.0"
+            "version": "==5.15.6.0"
         },
         "pyrsistent": {
             "hashes": [
