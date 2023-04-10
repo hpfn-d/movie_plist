@@ -1,36 +1,27 @@
 [[source]]
-
 name = "pypi"
 url = "https://pypi.org/simple"
 verify_ssl = true
 
-
 [dev-packages]
-
-pytest = "*"
-pytest-mock = "*"
 flake8 = "*"
-isort = "*"
-pytest-cov = "*"
-tox = "*"
-pyqt5-stubs = "*"
-mypy = "*"
 flake8-bugbear = "*"
 flake8-pyi = "*"
+isort = "*"
+mypy = "*"
+pyqt5-stubs = "*"
+pytest = "*"
+pytest-cov = "*"
+pytest-mock = "*"
+tox = "*"
 wily = "*"
 
-
 [packages]
-
 beautifulsoup4 = "*"
-pyqt5 = "==5.13.0"
-
-
-[scripts]
-
-cov_all = "pytest --cov=movie_plist"
-
+pyqt5 = "==5.15.9"
 
 [requires]
-
 python_version = "3.7"
+
+[scripts]
+cov_all = "pytest --cov=movie_plist"
