@@ -25,13 +25,8 @@
             "version": "==4.8.0"
         },
         "pyqt5": {
-            "hashes": [
-                "sha256:4d51a245d64fbd85c77ba3dee12b8fe018a440ccb49fd1cb0e4587c360655d3c",
-                "sha256:70954a2d182c8634e3b5f9deeb4230f186b59ec1166f3142cb523b74876c0d98",
-                "sha256:aa75b829cd977ca796262fcfe0dc8fc72f8413da4e5e2795e63897e1abfd2258",
-                "sha256:afbee0925439124b5c52dacaf9a6d8d4e160e36b636a6f9023832a696e15e3e9"
-            ],
-            "version": "==5.13.0"
+            "hashes": [],
+            "version": "==5.15.9"
         },
         "pyqt5-sip": {
             "hashes": [
@@ -369,13 +364,8 @@
             "version": "==2.4.2"
         },
         "pyqt5": {
-            "hashes": [
-                "sha256:4d51a245d64fbd85c77ba3dee12b8fe018a440ccb49fd1cb0e4587c360655d3c",
-                "sha256:70954a2d182c8634e3b5f9deeb4230f186b59ec1166f3142cb523b74876c0d98",
-                "sha256:aa75b829cd977ca796262fcfe0dc8fc72f8413da4e5e2795e63897e1abfd2258",
-                "sha256:afbee0925439124b5c52dacaf9a6d8d4e160e36b636a6f9023832a696e15e3e9"
-            ],
-            "version": "==5.13.0"
+            "hashes": [],
+            "version": "==5.15.9"
         },
         "pyqt5-sip": {
             "hashes": [
