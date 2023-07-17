@@ -59,11 +59,8 @@
             "version": "==0.4.6"
         },
         "colorlog": {
-            "hashes": [
-                "sha256:3cf31b25cbc8f86ec01fef582ef3b840950dea414084ed19ab922c8b493f9b42",
-                "sha256:450f52ea2a2b6ebb308f034ea9a9b15cea51e65650593dca1da3eb792e4e4981"
-            ],
-            "version": "==4.0.2"
+            "hashes": [],
+            "version": "==6.7.0"
         },
         "coverage": {
             "hashes": [
