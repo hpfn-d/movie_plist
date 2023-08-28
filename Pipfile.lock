@@ -173,10 +173,8 @@
             "version": "==1.3.0"
         },
         "progress": {
-            "hashes": [
-                "sha256:69ecedd1d1bbe71bf6313d88d1e6c4d2957b7f1d4f71312c211257f7dae64372"
-            ],
-            "version": "==1.5"
+            "hashes": [],
+            "version": "==1.6"
         },
         "py": {
             "hashes": [
