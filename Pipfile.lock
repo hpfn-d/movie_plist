@@ -225,11 +225,8 @@
             "version": "==2023.3.post1"
         },
         "radon": {
-            "hashes": [
-                "sha256:0cde1953547a164d24420ed6ccdfa18b61f1457b96a2b99ff0de76b22d504a0f",
-                "sha256:ee20308ce8bae7a89b067425b63b141a0077632ab318d5288da649c830882b3d"
-            ],
-            "version": "==3.0.3"
+            "hashes": [],
+            "version": "==6.0.1"
         },
         "requests": {
             "hashes": [
