@@ -165,11 +165,8 @@
             "version": "==23.1"
         },
         "plotly": {
-            "hashes": [
-                "sha256:9333f28feacaa0751df04cccfb266463bf5029dcb106d3f81d7af5942fd3d998",
-                "sha256:c5effc51364490b1a20fe7bb8443cfe2451004fca727c7f3fedbc30f4cef5aab"
-            ],
-            "version": "==4.1.0"
+            "hashes": [],
+            "version": "==5.17.0"
         },
         "pluggy": {
             "hashes": [
