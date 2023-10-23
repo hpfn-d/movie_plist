@@ -83,11 +83,8 @@
             "version": "==6.1.0"
         },
         "flake8-bugbear": {
-            "hashes": [
-                "sha256:d8c466ea79d5020cb20bf9f11cf349026e09517a42264f313d3f6fddb83e0571",
-                "sha256:ded4d282778969b5ab5530ceba7aa1a9f1b86fa7618fc96a19a1d512331640f8"
-            ],
-            "version": "==19.8.0"
+            "hashes": [],
+            "version": "==23.9.16"
         },
         "flake8-polyfill": {
             "hashes": [
