@@ -233,10 +233,8 @@
             "version": "==2.31.0"
         },
         "retrying": {
-            "hashes": [
-                "sha256:08c039560a6da2fe4f2c426d0766e284d3b736e355f8dd24b37367b0bb41973b"
-            ],
-            "version": "==1.3.3"
+            "hashes": [],
+            "version": "==1.3.4"
         },
         "six": {
             "hashes": [
