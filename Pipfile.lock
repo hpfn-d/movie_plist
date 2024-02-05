@@ -94,12 +94,8 @@
             "version": "==1.0.2"
         },
         "flake8-pyi": {
-            "hashes": [
-                "sha256:3646134dcc5269d3fd017624961de83cc0a0404f620233885ad86faf64265a11",
-                "sha256:a93a47ac78b6d363545885e9254d0eccac8a88c3806ab8af27e30dd8c058654f"
-            ],
-            "index": "pypi",
-            "version": "==19.3.0"
+            "hashes": [],
+            "version": "==24.1.0"
         },
         "future": {
             "hashes": [
