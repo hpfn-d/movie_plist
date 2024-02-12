@@ -106,11 +106,8 @@
             "version": "==4.0.2"
         },
         "gitpython": {
-            "hashes": [
-                "sha256:947cc75913e7b6da108458136607e2ee0e40c20be1e12d4284e7c6c12956c276",
-                "sha256:d2f4945f8260f6981d724f5957bc076398ada55cb5d25aaee10108bcdc894100"
-            ],
-            "version": "==3.0.2"
+            "hashes": [],
+            "version": "==3.1.41"
         },
         "idna": {
             "hashes": [
